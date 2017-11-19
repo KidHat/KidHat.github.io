@@ -112,17 +112,17 @@
 
 
 
-<meta name="description" content="linux下下载jdk wget  –no-check-certificate –no-cookies –header “Cookie: oraclelicense=accept-securebackup-cookie” http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.rpm">
+<meta name="description" content="linux下下载安装jdk wget  –no-check-certificate –no-cookies –header “Cookie: oraclelicense=accept-securebackup-cookie” http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.rpm 解压 tar -zxv">
 <meta property="og:type" content="article">
 <meta property="og:title" content="biji">
 <meta property="og:url" content="https://kidhat.github.io/2017/11/19/biji/index.html">
 <meta property="og:site_name" content="KidHat">
-<meta property="og:description" content="linux下下载jdk wget  –no-check-certificate –no-cookies –header “Cookie: oraclelicense=accept-securebackup-cookie” http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.rpm">
+<meta property="og:description" content="linux下下载安装jdk wget  –no-check-certificate –no-cookies –header “Cookie: oraclelicense=accept-securebackup-cookie” http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.rpm 解压 tar -zxv">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-19T10:24:25.860Z">
+<meta property="og:updated_time" content="2017-11-19T11:12:18.653Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="biji">
-<meta name="twitter:description" content="linux下下载jdk wget  –no-check-certificate –no-cookies –header “Cookie: oraclelicense=accept-securebackup-cookie” http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.rpm">
+<meta name="twitter:description" content="linux下下载安装jdk wget  –no-check-certificate –no-cookies –header “Cookie: oraclelicense=accept-securebackup-cookie” http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.rpm 解压 tar -zxv">
 
 
 
@@ -362,7 +362,10 @@
       
 
       
-        <h1 id="linux下下载jdk"><a href="#linux下下载jdk" class="headerlink" title="linux下下载jdk"></a>linux下下载jdk</h1><p> wget  –no-check-certificate –no-cookies –header “Cookie: oraclelicense=accept-securebackup-cookie” <a href="http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.rpm" target="_blank" rel="external">http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.rpm</a></p>
+        <h1 id="linux下下载安装jdk"><a href="#linux下下载安装jdk" class="headerlink" title="linux下下载安装jdk"></a>linux下下载安装jdk</h1><p> wget  –no-check-certificate –no-cookies –header “Cookie: oraclelicense=accept-securebackup-cookie” <a href="http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.rpm" target="_blank" rel="external">http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.rpm</a><br> 解压 tar -zxvf jdk-7u79-linux-x64.tar.gz<br> 设置环境变量 vi /etc/profile<br><figure class="highlight plain"><figcaption><span>java environment</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">JAVA_HOME=/usr/java/jdk1.7.0_79</div><div class="line">JRE_HOME=/usr/java/jdk1.7.0_79/jre</div><div class="line">CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib</div><div class="line">PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin</div><div class="line">export JAVA_HOME JRE_HOME CLASS_PATH PATH</div></pre></td></tr></table></figure></p>
+<p>让修改生效 source /etc/profile<br>验证   java -version</p>
+<h2 id="下载安装tomcat"><a href="#下载安装tomcat" class="headerlink" title="下载安装tomcat"></a>下载安装tomcat</h2><p>wget <a href="http://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-8/v8.5.23/bin/apache-tomcat-8.5.23.tar.gz" target="_blank" rel="external">http://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-8/v8.5.23/bin/apache-tomcat-8.5.23.tar.gz</a><br>解压之后进去bin目录，运行  ./startup.sh。通过8080端口访问。<br>(<strong>路径问题</strong>：如果jdk使用的不是yum则需要自己在tomcat加上jdk路径，/usr/local/tomcat/bin/catalina.sh<br>export JAVA_HOME=/usr/local/jdk<br>export JRE_HOME=/usr/local/jdk/jre<br><strong>firewall问题</strong>：在防火墙配置允许端口8080. firewall-cmd –add-port=8080/tcp)</p>
+<h2 id="下载安装nginx、pcre"><a href="#下载安装nginx、pcre" class="headerlink" title="下载安装nginx、pcre"></a>下载安装nginx、pcre</h2><p>wget <a href="http://nginx.org/download/nginx-1.12.2.tar.gz" target="_blank" rel="external">http://nginx.org/download/nginx-1.12.2.tar.gz</a><br>wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre2-10.21.tar.gz</p>
 
       
     </div>
@@ -541,7 +544,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#linux下下载jdk"><span class="nav-number">1.</span> <span class="nav-text">linux下下载jdk</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#linux下下载安装jdk"><span class="nav-number">1.</span> <span class="nav-text">linux下下载安装jdk</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载安装tomcat"><span class="nav-number">1.1.</span> <span class="nav-text">下载安装tomcat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载安装nginx、pcre"><span class="nav-number">1.2.</span> <span class="nav-text">下载安装nginx、pcre</span></a></li></ol></li></ol></div>
             
 
           </div>
